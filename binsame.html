@@ -1,0 +1,174 @@
+<html>
+<head>
+<style>
+table
+{
+  border-collapse:collapse;
+}
+
+td
+{
+  width: 12pt;
+  height:12pt;
+  text-align:center;
+}
+
+td.sel
+{
+  background-color:red;
+}
+</style>
+<script type="text/javascript" src="/home/tamu/prog/fc2/jquery/js/jquery-1.4.2.min.js"></script>
+<script>
+var NX = 5,
+    NY = 5;
+
+function TD(x,y,val)
+{
+  if ( x >= NX || x < 0 || y >= NY || y < 0 )
+    return null;
+  var td = $("td[x="+x+"][y="+y+"]");
+  if ( val == null )
+    return td;
+  else
+    td.text(val);
+}
+
+function neighbor(x, y, dir)
+{
+  switch ( dir ) {
+  case "left":
+    return TD(x-1,y);
+    break;
+  case "right":
+    return TD(x+1,y);
+    break;
+  case "up":
+    return TD(x,y-1);
+    break;
+  case "down":
+    return TD(x,y+1);
+    break;
+  }
+}
+
+function getSeq()
+{
+  var nEvenOdd,
+      sign,
+      ans,
+      seq,bit,x,y;
+
+  do {
+    sign = +1;
+    ans = [];
+    nEvenOdd = 0;
+    for ( y = 0; y < NY; ++y ) {
+      seq = "";
+      for ( x = 0; x < NX; ++x ) {
+        bit = (Math.random() < 0.5) ? 1 : 0;
+        seq += bit;
+        nEvenOdd += sign * bit;
+        sign = -sign;
+      }
+      ans.push(seq);
+    }
+  } while ( nEvenOdd % 3 != 0 );
+
+  return ans;
+}
+
+$(function() {
+  var seq = getSeq(),
+      x,y;
+
+  for ( y = 0; y < NY; ++y ) {
+    var tr = $("<tr />")
+               .appendTo($("#area"))
+               .attr("y", y);
+    for ( x = 0; x < NX; ++x ) {
+      $("<td />")
+        .appendTo(tr)
+        .attr("x", x).attr("y",y)
+        .text(seq[y].charAt(x));
+    }
+  }
+
+  var posX, posY;
+
+  $("td")
+    .mouseenter(function(ev) {
+       var dir, nei, x, y;
+       posX = ev.pageX;
+       posY = ev.pageY;
+       x = parseInt($(this).attr("x"));
+       y = parseInt($(this).attr("y"));
+       for ( var d = 0; d < 4; ++d ) {
+         dir = ["left","up","right","down"][d];
+         nei = neighbor(x,y,dir);
+         if ( nei && nei.text() == $(this).text() && nei.text() != "" ) {
+             $(this).addClass("sel");
+             nei.addClass("sel");
+             break;
+         }
+       }
+     })
+    .mousemove(function(ev) {
+       var nei, dir, x, y,
+           dx = ev.pageX - posX,
+           dy = ev.pageY - posY;
+       if ( Math.abs(dx) < 3 && Math.abs(dy) < 3 )
+         return;
+       if ( Math.abs(dx) > Math.abs(dy) ) {
+         dir = (dx>0) ? "right" : "left";
+       } else {
+         dir = (dy>0) ? "down" : "up";
+       }
+       posX=ev.pageX;
+       posY=ev.pageY;
+
+       x = parseInt($(this).attr("x"));
+       y = parseInt($(this).attr("y"));
+       nei = neighbor(x,y, dir);
+       if ( nei && nei.text() == $(this).text() && nei.text() != "") {
+         $(".sel").removeClass("sel");
+         $(this).addClass("sel");
+         nei.addClass("sel");
+       }
+     })
+    .mouseleave(function() {
+       $(".sel").removeClass("sel");
+     })
+    .click(function() {
+       var sel = $(".sel"), x, y, x1, y1, up, right, val;
+       if ( sel.length < 2 )
+         return;
+       x = parseInt(sel.first().attr("x"));
+       y = parseInt(sel.first().attr("y"));
+       sel.removeClass("sel");
+       if ( y != sel.last().attr("y") ) {
+         for ( x1 = x; x1 < NX; ++x1 ) {
+           right = TD(x1+1, y+1);
+           val = right ? right.text() : "";
+           TD(x1,y,val);
+           right = TD(x1+1, y);
+           val = right ? right.text() : "";
+           TD(x1,y+1,val);
+         }
+       } else {
+         for ( x1 = x; x1 < NX; x1+=2 ) {
+           right = TD(x1+2, y);
+           val = right ? right.text() : "";
+           TD(x1,y,val);
+           right = TD(x1+3, y);
+           val = right ? right.text() : "";
+           TD(x1+1,y,val);
+         }
+       }
+     });
+});
+</script>
+</head>
+<body>
+<table id="area"> </table>
+</body>
