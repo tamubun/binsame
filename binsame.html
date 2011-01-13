@@ -165,45 +165,42 @@ $(function() {
        x = parseInt(sel.first().attr("x"));
        y = parseInt(sel.first().attr("y"));
        sel.removeClass("sel");
-       sel.fadeOut("fast", function() {
-         $(this).show();
-         if ( y != sel.last().attr("y") ) {
-           for ( y1 = y+1; y1 >= 0; y1-=2 ) {
-             up = TD(x, y1-2);
-             val = up ? up.text() : "";
-             TD(x,y1,val);
-             up = TD(x, y1-3);
-             val = up ? up.text() : "";
-             TD(x,y1-1,val);
-           }
-         } else {
-           for ( y1 = y; y1 >=0; --y1 ) {
-             up = TD(x+1, y1-1);
-             val = up ? up.text() : "";
-             TD(x,y1,val);
-             up = TD(x, y1-1);
-             val = up ? up.text() : "";
-             TD(x+1,y1,val);
-           }
+       if ( y != sel.last().attr("y") ) {
+         for ( y1 = y+1; y1 >= 0; y1-=2 ) {
+           up = TD(x, y1-2);
+           val = up ? up.text() : "";
+           TD(x,y1,val);
+           up = TD(x, y1-3);
+           val = up ? up.text() : "";
+           TD(x,y1-1,val);
          }
+       } else {
+         for ( y1 = y; y1 >=0; --y1 ) {
+           up = TD(x+1, y1-1);
+           val = up ? up.text() : "";
+           TD(x,y1,val);
+           up = TD(x, y1-1);
+           val = up ? up.text() : "";
+           TD(x+1,y1,val);
+         }
+       }
 
-         if ( TD(x).text() != "" ) {
-           ++x;
-           if ( TD(x) == null || TD(x).text() != "" )
-             x = null;
-         }
+       if ( TD(x).text() != "" ) {
+         ++x;
+         if ( TD(x) == null || TD(x).text() != "" )
+           x = null;
+       }
 
-         if ( x != null ) {
-           var left, right;
-           for ( left = x; left > 0 && TD(left-1).text() == ""; --left )
-             ; // empty
-           for ( right = x; right < rightEdge-1 && TD(right+1).text() == ""; ++right )
-             ; // empty
-           if ( (right - left) % 2 == 0 )
-             --right;
-           shrink(left, right);
-         }
-       });
+       if ( x != null ) {
+         var left, right;
+         for ( left = x; left > 0 && TD(left-1).text() == ""; --left )
+           ; // empty
+         for ( right = x; right < rightEdge-1 && TD(right+1).text() == ""; ++right )
+           ; // empty
+         if ( (right - left) % 2 == 0 )
+           --right;
+         shrink(left, right);
+       }
      });
 });
 </script>
