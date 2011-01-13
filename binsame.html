@@ -20,14 +20,14 @@ td.sel
 </style>
 <script type="text/javascript" src="./jquery-1.4.2.min.js"></script>
 <script>
-var NX = 5,
-    NY = 5;
+var NX = 35,
+    NY = 7;
 
 function TD(x,y,val)
 {
-  if ( x >= NX || x < 0 || y >= NY || y < 0 )
+  if ( x >= NX || x < 0 || y && y >= NY || y && y < 0 )
     return null;
-  var td = $("td[x="+x+"][y="+y+"]");
+  var td = (y != null) ? $("td[x="+x+"][y="+y+"]") : $("td[x="+x+"]");
   if ( val == null )
     return td;
   else
@@ -78,14 +78,27 @@ function getSeq()
   return ans;
 }
 
+function shrink(from, to)
+{
+  if ( to <= from )
+    return;
+  var x1, y1, d = to - from + 1;
+  for ( y1 = 0; y1 < NY; ++y1 ) {
+    for ( x1 = from; x1 < NX-d; ++x1 ) {
+      TD(x1,y1, TD(x1+d,y1).text());
+    }
+    for ( ; x1 < NX; ++x1 ) {
+      TD(x1,y1, "");
+    }
+  }
+}
+
 $(function() {
   var seq = getSeq(),
       x,y;
 
   for ( y = 0; y < NY; ++y ) {
-    var tr = $("<tr />")
-               .appendTo($("#area"))
-               .attr("y", y);
+    var tr = $("<tr />").appendTo($("#area"));
     for ( x = 0; x < NX; ++x ) {
       $("<td />")
         .appendTo(tr)
@@ -140,7 +153,7 @@ $(function() {
        $(".sel").removeClass("sel");
      })
     .click(function() {
-       var sel = $(".sel"), x, y, y1, up, val;
+        var sel = $(".sel"), x, y, y1, up, val;
        if ( sel.length < 2 )
          return;
        x = parseInt(sel.first().attr("x"));
@@ -164,6 +177,17 @@ $(function() {
            val = up ? up.text() : "";
            TD(x+1,y1,val);
          }
+       }
+
+       if ( TD(x).text() == "" ) {
+         var left, right;
+         for ( left = x; left > 0 && TD(left-1).text() == ""; --left )
+           ; // empty
+         for ( right = x; right < NX-1 && TD(right+1).text() == ""; ++right )
+           ; // empty
+         if ( (right - left) % 2 == 0 )
+           --right;
+         shrink(left, right);
        }
      });
 });
