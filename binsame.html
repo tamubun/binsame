@@ -21,11 +21,12 @@ td.sel
 <script type="text/javascript" src="./jquery-1.4.2.min.js"></script>
 <script>
 var NX = 35,
-    NY = 7;
+    NY = 7,
+    rightEdge = NX;
 
 function TD(x,y,val)
 {
-  if ( x >= NX || x < 0 || y && y >= NY || y && y < 0 )
+  if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
     return null;
   var td = (y != null) ? $("td[x="+x+"][y="+y+"]") : $("td[x="+x+"]");
   if ( val == null )
@@ -84,13 +85,14 @@ function shrink(from, to)
     return;
   var x1, y1, d = to - from + 1;
   for ( y1 = 0; y1 < NY; ++y1 ) {
-    for ( x1 = from; x1 < NX-d; ++x1 ) {
+    for ( x1 = from; x1 < rightEdge-d; ++x1 ) {
       TD(x1,y1, TD(x1+d,y1).text());
     }
-    for ( ; x1 < NX; ++x1 ) {
+    for ( ; x1 < rightEdge; ++x1 ) {
       TD(x1,y1, "");
     }
   }
+  rightEdge -= d;
 }
 
 $(function() {
@@ -183,7 +185,7 @@ $(function() {
          var left, right;
          for ( left = x; left > 0 && TD(left-1).text() == ""; --left )
            ; // empty
-         for ( right = x; right < NX-1 && TD(right+1).text() == ""; ++right )
+         for ( right = x; right < rightEdge-1 && TD(right+1).text() == ""; ++right )
            ; // empty
          if ( (right - left) % 2 == 0 )
            --right;
