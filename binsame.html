@@ -22,13 +22,14 @@ td.sel
 <script>
 var NX = 35,
     NY = 7,
-    rightEdge = NX;
+    rightEdge = NX,
+    matrix = [];
 
 function TD(x,y,val)
 {
   if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
     return null;
-  var td = (y != null) ? $("td[x="+x+"][y="+y+"]") : $("td[x="+x+"]");
+  var td = (y != null) ? matrix[y][x] : $("td[x="+x+"]");
   if ( val == null )
     return td;
   else
@@ -100,12 +101,15 @@ $(function() {
       x,y;
 
   for ( y = 0; y < NY; ++y ) {
-    var tr = $("<tr />").appendTo($("#area"));
+    var tr = $("<tr />").appendTo($("#area")),
+        row = [];
+    matrix.push(row);
     for ( x = 0; x < NX; ++x ) {
-      $("<td />")
-        .appendTo(tr)
+      var td = $("<td />");
+      td.appendTo(tr)
         .attr("x", x).attr("y",y)
         .text(seq[y].charAt(x));
+      row.push(td);
     }
   }
 
