@@ -18,7 +18,7 @@ td.sel
   background-color:red;
 }
 </style>
-<script type="text/javascript" src="/home/tamu/prog/fc2/jquery/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="./jquery-1.4.2.min.js"></script>
 <script>
 var NX = 5,
     NY = 5;
@@ -140,29 +140,29 @@ $(function() {
        $(".sel").removeClass("sel");
      })
     .click(function() {
-       var sel = $(".sel"), x, y, x1, y1, up, right, val;
+       var sel = $(".sel"), x, y, y1, up, val;
        if ( sel.length < 2 )
          return;
        x = parseInt(sel.first().attr("x"));
        y = parseInt(sel.first().attr("y"));
        sel.removeClass("sel");
        if ( y != sel.last().attr("y") ) {
-         for ( x1 = x; x1 < NX; ++x1 ) {
-           right = TD(x1+1, y+1);
-           val = right ? right.text() : "";
-           TD(x1,y,val);
-           right = TD(x1+1, y);
-           val = right ? right.text() : "";
-           TD(x1,y+1,val);
+         for ( y1 = y+1; y1 >= 0; y1-=2 ) {
+           up = TD(x, y1-2);
+           val = up ? up.text() : "";
+           TD(x,y1,val);
+           up = TD(x, y1-3);
+           val = up ? up.text() : "";
+           TD(x,y1-1,val);
          }
        } else {
-         for ( x1 = x; x1 < NX; x1+=2 ) {
-           right = TD(x1+2, y);
-           val = right ? right.text() : "";
-           TD(x1,y,val);
-           right = TD(x1+3, y);
-           val = right ? right.text() : "";
-           TD(x1+1,y,val);
+         for ( y1 = y; y1 >=0; --y1 ) {
+           up = TD(x+1, y1-1);
+           val = up ? up.text() : "";
+           TD(x,y1,val);
+           up = TD(x, y1-1);
+           val = up ? up.text() : "";
+           TD(x+1,y1,val);
          }
        }
      });
