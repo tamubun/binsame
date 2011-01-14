@@ -174,12 +174,14 @@ $(function() {
          sel.removeClass("sel");
          if ( y != sel.last().attr("y") ) {
            for ( y1 = y+1; y1 >= 0; y1-=2 ) {
-             up = elemAt(x, y1-2);
-             val = up ? up.text() : "";
-             elemAt(x,y1,val);
              up = elemAt(x, y1-3);
              val = up ? up.text() : "";
              elemAt(x,y1-1,val);
+             up = elemAt(x, y1-2);
+             val = up ? up.text() : "";
+             elemAt(x,y1,val);
+             if ( val == "" )
+               break;
            }
          } else {
            for ( y1 = y; y1 >=0; --y1 ) {
@@ -195,19 +197,17 @@ $(function() {
          if ( elemAt(x).text() != "" ) {
            ++x;
            if ( elemAt(x) == null || elemAt(x).text() != "" )
-             x = null;
+             return;
          }
 
-         if ( x != null ) {
-           var left, right;
-           for ( left = x; left > 0 && elemAt(left-1).text() == ""; --left )
-             ; // empty
-           for ( right = x; right < rightEdge-1 && elemAt(right+1).text() == ""; ++right )
-             ; // empty
-           if ( (right - left) % 2 == 0 )
-             --right;
-           shrink(left, right);
-         }
+         var left, right;
+         for ( left = x; left > 0 && elemAt(left-1).text() == ""; --left )
+           ; // empty
+         for ( right = x; right < rightEdge-1 && elemAt(right+1).text() == ""; ++right )
+           ; // empty
+         if ( (right - left) % 2 == 0 )
+           --right;
+         shrink(left, right);
        });
      });
 });
