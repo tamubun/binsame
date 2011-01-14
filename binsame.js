@@ -1,13 +1,13 @@
 var NX = 35,
     NY = 7,
     rightEdge = NX,
-    matrix = [];
+    elemMatrix = [];
 
 function elemAt(x,y,val)
 {
   if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
     return null;
-  var td = (y != null) ? matrix[x].slice(y,y+1) : matrix[x];
+  var td = (y != null) ? elemMatrix[x].slice(y,y+1) : elemMatrix[x];
   if ( val == null )
     return td;
   else
@@ -102,7 +102,7 @@ $(function() {
       x,y;
 
   for ( x = 0; x < NX; ++x )
-    matrix.push(jQuery());
+    elemMatrix.push(jQuery());
   for ( y = 0; y < NY; ++y ) {
     var tr = $("<tr />").appendTo($("#area"));
     for ( x = 0; x < NX; ++x ) {
@@ -110,7 +110,7 @@ $(function() {
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
         .text(seq[y][x]);
-      matrix[x] = matrix[x].add(td);
+      elemMatrix[x] = elemMatrix[x].add(td);
     }
   }
 
