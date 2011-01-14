@@ -1,0 +1,16 @@
+table
+{
+  border-collapse:collapse;
+}
+
+td
+{
+  width: 12pt;
+  height:12pt;
+  text-align:center;
+}
+
+td.sel
+{
+  background-color:red;
+}
