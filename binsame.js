@@ -37,20 +37,20 @@ function getSeq()
   var diffEvenOdd,
       sign,
       ans,
-      seq,bit,x,y;
+      line,bit,x,y;
 
   sign = +1;
   ans = [];
   diffEvenOdd = 0;
   for ( y = 0; y < NY; ++y ) {
-    seq = "";
+    line = [];
     for ( x = 0; x < NX; ++x ) {
       bit = (Math.random() < 0.5) ? 1 : 0;
-      seq += bit;
+      line.push(bit);
       diffEvenOdd += sign * bit;
       sign = -sign;
     }
-    ans.push(seq);
+    ans.push(line);
   }
 
   /* Unsolvable when the numbers of 1's in even and odd positions differ. */
@@ -59,34 +59,18 @@ function getSeq()
     while ( true ) {
       x = pos%NX;
       y = Math.floor(pos/NX);
-      bit = ans[y].charAt(x);
+      bit = ans[y][x];
       if ( diffEvenOdd > 0 ) {
-        if ( pos % 2 == 0 ) {
-          if ( bit == "1" ) {
-            ans[y] = ans[y].slice(0,x) + "0" + ans[y].slice(x+1);
-            --diffEvenOdd;
-            break;
-          }
-        } else {
-          if ( bit == "0" ) {
-            ans[y] = ans[y].slice(0,x) + "1" + ans[y].slice(x+1);
-            --diffEvenOdd;
-            break;
-          }
+        if ( pos % 2 == 0 && bit == 1 || pos % 2 == 1 && bit == 0 ) {
+          ans[y][x] = 1 - bit;
+          --diffEvenOdd;
+          break;
         }
       } else {
-        if ( pos % 2 == 0 ) {
-          if ( bit == "0" ) {
-            ans[y] = ans[y].slice(0,x) + "1" + ans[y].slice(x+1);
-            ++diffEvenOdd;
-            break;
-          }
-        } else {
-          if ( bit == "1" ) {
-            ans[y] = ans[y].slice(0,x) + "0" + ans[y].slice(x+1);
-            ++diffEvenOdd;
-            break;
-          }
+        if ( pos % 2 == 0 && bit == 0 || pos % 2 == 1 && bit == 1 ) {
+          ans[y][x] = 1 - bit;
+          ++diffEvenOdd;
+          break;
         }
       }
       if (++pos >= NX*NY)
@@ -125,7 +109,7 @@ $(function() {
       var td = $("<td />");
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
-        .text(seq[y].charAt(x));
+        .text(seq[y][x]);
       matrix[x] = matrix[x].add(td);
     }
   }
