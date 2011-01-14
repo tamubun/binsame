@@ -1,6 +1,7 @@
 var NX = 35,
     NY = 7,
     rightEdge = NX,
+    binMatrix,
     elemMatrix = [];
 
 function elemAt(x,y,val)
@@ -98,9 +99,9 @@ function shrink(from, to)
 }
 
 $(function() {
-  var seq = getSeq(),
-      x,y;
+  var x,y;
 
+  binMatrix = getSeq();
   for ( x = 0; x < NX; ++x )
     elemMatrix.push(jQuery());
   for ( y = 0; y < NY; ++y ) {
@@ -109,7 +110,7 @@ $(function() {
       var td = $("<td />");
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
-        .text(seq[y][x]);
+        .text(binMatrix[y][x]);
       elemMatrix[x] = elemMatrix[x].add(td);
     }
   }
