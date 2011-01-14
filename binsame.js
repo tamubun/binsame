@@ -3,7 +3,7 @@ var NX = 35,
     rightEdge = NX,
     matrix = [];
 
-function TD(x,y,val)
+function elemAt(x,y,val)
 {
   if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
     return null;
@@ -18,16 +18,16 @@ function neighbor(x, y, dir)
 {
   switch ( dir ) {
   case "left":
-    return TD(x-1,y);
+    return elemAt(x-1,y);
     break;
   case "right":
-    return TD(x+1,y);
+    return elemAt(x+1,y);
     break;
   case "up":
-    return TD(x,y-1);
+    return elemAt(x,y-1);
     break;
   case "down":
-    return TD(x,y+1);
+    return elemAt(x,y+1);
     break;
   }
 }
@@ -104,11 +104,11 @@ function shrink(from, to)
   var x1, y1, d = to - from + 1;
   for ( x1 = from; x1 < rightEdge-d; ++x1 ) {
     for ( y1 = 0; y1 < NY; ++y1 ) {
-      TD(x1,y1, TD(x1+d,y1).text());
+      elemAt(x1,y1, elemAt(x1+d,y1).text());
     }
   }
   for ( ; x1 < rightEdge; ++x1 ) {
-    TD(x1, null, "");
+    elemAt(x1, null, "");
   }
   rightEdge -= d;
 }
@@ -189,35 +189,35 @@ $(function() {
          sel.removeClass("sel");
          if ( y != sel.last().attr("y") ) {
            for ( y1 = y+1; y1 >= 0; y1-=2 ) {
-             up = TD(x, y1-2);
+             up = elemAt(x, y1-2);
              val = up ? up.text() : "";
-             TD(x,y1,val);
-             up = TD(x, y1-3);
+             elemAt(x,y1,val);
+             up = elemAt(x, y1-3);
              val = up ? up.text() : "";
-             TD(x,y1-1,val);
+             elemAt(x,y1-1,val);
            }
          } else {
            for ( y1 = y; y1 >=0; --y1 ) {
-             up = TD(x+1, y1-1);
+             up = elemAt(x+1, y1-1);
              val = up ? up.text() : "";
-             TD(x,y1,val);
-             up = TD(x, y1-1);
+             elemAt(x,y1,val);
+             up = elemAt(x, y1-1);
              val = up ? up.text() : "";
-             TD(x+1,y1,val);
+             elemAt(x+1,y1,val);
            }
          }
 
-         if ( TD(x).text() != "" ) {
+         if ( elemAt(x).text() != "" ) {
            ++x;
-           if ( TD(x) == null || TD(x).text() != "" )
+           if ( elemAt(x) == null || elemAt(x).text() != "" )
              x = null;
          }
 
          if ( x != null ) {
            var left, right;
-           for ( left = x; left > 0 && TD(left-1).text() == ""; --left )
+           for ( left = x; left > 0 && elemAt(left-1).text() == ""; --left )
              ; // empty
-           for ( right = x; right < rightEdge-1 && TD(right+1).text() == ""; ++right )
+           for ( right = x; right < rightEdge-1 && elemAt(right+1).text() == ""; ++right )
              ; // empty
            if ( (right - left) % 2 == 0 )
              --right;
