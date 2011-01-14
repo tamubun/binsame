@@ -34,26 +34,65 @@ function neighbor(x, y, dir)
 
 function getSeq()
 {
-  var nEvenOdd,
+  var diffEvenOdd,
       sign,
       ans,
       seq,bit,x,y;
 
-  do {
-    sign = +1;
-    ans = [];
-    nEvenOdd = 0;
-    for ( y = 0; y < NY; ++y ) {
-      seq = "";
-      for ( x = 0; x < NX; ++x ) {
-        bit = (Math.random() < 0.5) ? 1 : 0;
-        seq += bit;
-        nEvenOdd += sign * bit;
-        sign = -sign;
-      }
-      ans.push(seq);
+  sign = +1;
+  ans = [];
+  diffEvenOdd = 0;
+  for ( y = 0; y < NY; ++y ) {
+    seq = "";
+    for ( x = 0; x < NX; ++x ) {
+      bit = (Math.random() < 0.5) ? 1 : 0;
+      seq += bit;
+      diffEvenOdd += sign * bit;
+      sign = -sign;
     }
-  } while ( nEvenOdd % 3 != 0 );
+    ans.push(seq);
+  }
+
+  /* Unsolvable when the numbers of 1's in even and odd positions differ. */
+  while ( diffEvenOdd != 0 ) {
+    var pos = Math.floor(Math.random() * NX * NY);
+    while ( true ) {
+      x = pos%NX;
+      y = Math.floor(pos/NX);
+      bit = ans[y].charAt(x);
+      if ( diffEvenOdd > 0 ) {
+        if ( pos % 2 == 0 ) {
+          if ( bit == "1" ) {
+            ans[y] = ans[y].slice(0,x) + "0" + ans[y].slice(x+1);
+            --diffEvenOdd;
+            break;
+          }
+        } else {
+          if ( bit == "0" ) {
+            ans[y] = ans[y].slice(0,x) + "1" + ans[y].slice(x+1);
+            --diffEvenOdd;
+            break;
+          }
+        }
+      } else {
+        if ( pos % 2 == 0 ) {
+          if ( bit == "0" ) {
+            ans[y] = ans[y].slice(0,x) + "1" + ans[y].slice(x+1);
+            ++diffEvenOdd;
+            break;
+          }
+        } else {
+          if ( bit == "1" ) {
+            ans[y] = ans[y].slice(0,x) + "0" + ans[y].slice(x+1);
+            ++diffEvenOdd;
+            break;
+          }
+        }
+      }
+      if (++pos >= NX*NY)
+        pos = 0;
+    }
+  }
 
   return ans;
 }
