@@ -7,7 +7,7 @@ function TD(x,y,val)
 {
   if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
     return null;
-  var td = (y != null) ? matrix[y][x] : $("td[x="+x+"]");
+  var td = (y != null) ? matrix[x].slice(y,y+1) : matrix[x];
   if ( val == null )
     return td;
   else
@@ -63,13 +63,13 @@ function shrink(from, to)
   if ( to <= from )
     return;
   var x1, y1, d = to - from + 1;
-  for ( y1 = 0; y1 < NY; ++y1 ) {
-    for ( x1 = from; x1 < rightEdge-d; ++x1 ) {
+  for ( x1 = from; x1 < rightEdge-d; ++x1 ) {
+    for ( y1 = 0; y1 < NY; ++y1 ) {
       TD(x1,y1, TD(x1+d,y1).text());
     }
-    for ( ; x1 < rightEdge; ++x1 ) {
-      TD(x1,y1, "");
-    }
+  }
+  for ( ; x1 < rightEdge; ++x1 ) {
+    TD(x1, null, "");
   }
   rightEdge -= d;
 }
@@ -78,16 +78,16 @@ $(function() {
   var seq = getSeq(),
       x,y;
 
+  for ( x = 0; x < NX; ++x )
+    matrix.push(jQuery());
   for ( y = 0; y < NY; ++y ) {
-    var tr = $("<tr />").appendTo($("#area")),
-        row = [];
-    matrix.push(row);
+    var tr = $("<tr />").appendTo($("#area"));
     for ( x = 0; x < NX; ++x ) {
       var td = $("<td />");
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
         .text(seq[y].charAt(x));
-      row.push(td);
+      matrix[x] = matrix[x].add(td);
     }
   }
 
