@@ -4,6 +4,17 @@ var NX = 35,
     binMatrix,
     elemMatrix = [];
 
+function binAt(x,y,val)
+{
+  if ( x >= rightEdge || x < 0 || y >= NY || y < 0 )
+    return -1;
+  if ( val == null )
+    return binMatrix[y][x];
+  else
+    binMatrix[y][x] = val;
+}
+
+
 function elemAt(x,y,val)
 {
   if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
@@ -174,13 +185,13 @@ $(function() {
          sel.removeClass("sel");
          if ( y != sel.last().attr("y") ) {
            for ( y1 = y+1; y1 >= 0; y1-=2 ) {
-             up = elemAt(x, y1-3);
-             val = up ? up.text() : "";
-             elemAt(x,y1-1,val);
-             up = elemAt(x, y1-2);
-             val = up ? up.text() : "";
-             elemAt(x,y1,val);
-             if ( val == "" )
+             val = binAt(x,y1-3);
+             binAt(x,y1-1,val);
+             elemAt(x,y1-1,val != -1 ? val : "");
+             val = binAt(x,y1-2);
+             binAt(x,y1,val);
+             elemAt(x,y1,val != -1 ? val : "");
+             if ( val == null  )
                break;
            }
          } else {
