@@ -38,20 +38,20 @@ function getSeq()
   var diffEvenOdd,
       sign,
       ans,
-      line,bit,x,y;
+      col,bit,x,y;
 
   sign = +1;
   ans = [];
   diffEvenOdd = 0;
-  for ( y = 0; y < NY; ++y ) {
-    line = [];
-    for ( x = 0; x < NX; ++x ) {
+  for ( x = 0; x < NX; ++x ) {
+    col = [];
+    for ( y = 0; y < NY; ++y ) {
       bit = (Math.random() < 0.5) ? 1 : 0;
-      line.push(bit);
+      col.push(bit);
       diffEvenOdd += sign * bit;
       sign = -sign;
     }
-    ans.push(line);
+    ans.push(col);
   }
 
   /* Unsolvable when the numbers of 1's in even and odd positions differ. */
@@ -60,16 +60,16 @@ function getSeq()
     while ( true ) {
       x = pos%NX;
       y = Math.floor(pos/NX);
-      bit = ans[y][x];
+      bit = ans[x][y];
       if ( diffEvenOdd > 0 ) {
         if ( pos % 2 == 0 && bit == 1 || pos % 2 == 1 && bit == 0 ) {
-          ans[y][x] = 1 - bit;
+          ans[x][y] = 1 - bit;
           --diffEvenOdd;
           break;
         }
       } else {
         if ( pos % 2 == 0 && bit == 0 || pos % 2 == 1 && bit == 1 ) {
-          ans[y][x] = 1 - bit;
+          ans[x][y] = 1 - bit;
           ++diffEvenOdd;
           break;
         }
@@ -110,7 +110,7 @@ $(function() {
       var td = $("<td />");
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
-        .text(binMatrix[y][x]);
+        .text(binMatrix[x][y]);
       elemMatrix[x] = elemMatrix[x].add(td);
     }
   }
