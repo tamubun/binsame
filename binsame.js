@@ -40,10 +40,15 @@ function elemAt(x,y,val)
   if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
     return null;
   var td = (y != null) ? elemMatrix[x].slice(y,y+1) : elemMatrix[x];
-  if ( val == null )
+  if ( val == null ) {
     return td;
-  else
+  } else {
     td.text(val != -1 ? val : "");
+    if ( val != -1 )
+      td.attr("bin", val );
+    else
+      td.removeAttr("bin");
+  }
 }
 
 function neighbor(x, y, dir)
@@ -149,7 +154,8 @@ $(function() {
       var td = $("<td />");
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
-        .text(binAt(x,y));
+        .text(binAt(x,y))
+        .attr("bin", binAt(x,y))
       elemMatrix[x] = elemMatrix[x].add(td);
     }
   }

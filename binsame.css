@@ -1,5 +1,11 @@
+body
+{
+text-align: center;
+}
+
 table
 {
+  margin: 0 auto;
   background:#88aa88;
   border-width:4px;
   border-style:outset;
@@ -12,9 +18,25 @@ td
   text-align:center;
   border-width:2px;
   border-style:outset;
+  font-size:0pt;
+  text-indent:-9999px;
 }
 
 td.sel
 {
   background-color:red;
+}
+
+td[bin="0"]
+{
+  background-image:url(w.png);
+  background-repeat:no-repeat;
+  background-position:4px 2px;
+}
+
+td[bin="1"]
+{
+  background-image:url(b.png);
+  background-repeat:no-repeat;
+  background-position:4px 2px;
 }
