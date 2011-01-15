@@ -1,19 +1,39 @@
 var NX = 35,
     NY = 7,
+    EMPTY_COL = [],
     rightEdge = NX,
     binMatrix,
     elemMatrix = [];
 
+for ( var y = 0; y < NY; ++y )
+  EMPTY_COL.push(-1);
+
 function binAt(x,y,val)
 {
-  if ( x >= rightEdge || x < 0 || y >= NY || y < 0 )
+  if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
     return -1;
-  if ( val == null )
-    return binMatrix[y][x];
-  else
-    binMatrix[y][x] = val;
+  if ( y != null ) {
+    if ( val == null )
+      return binMatrix[x][y];
+    else
+      binMatrix[x][y] = val;
+  } else {
+    if ( val == null )
+      return binMatrix[x];
+    else
+      binMatrix[x] = val;
+  }
 }
 
+function emptyCol(x)
+{
+  if ( x >= rightEdge )
+    return true;
+  for ( var y = 0; y < NY; ++y )
+    if ( binMatrix[x][y] != -1 )
+      return false;
+  return true;
+}
 
 function elemAt(x,y,val)
 {
@@ -23,7 +43,7 @@ function elemAt(x,y,val)
   if ( val == null )
     return td;
   else
-    td.text(val);
+    td.text(val != -1 ? val : "");
 }
 
 function neighbor(x, y, dir)
@@ -93,10 +113,19 @@ function getSeq()
   return ans;
 }
 
-function shrink(from, to)
+function shrinkBin(from, to)
 {
-  if ( to <= from )
-    return;
+  var x1, y1, d = to - from + 1;
+  for ( x1 = from; x1 < rightEdge-d; ++x1 ) {
+    binAt(x1, null, binAt(x1+d));
+  }
+  for ( ; x1 < rightEdge; ++x1 ) {
+    binAt(x1, null, EMPTY_COL);
+  }
+}
+
+function shrinkElem(from, to)
+{
   var x1, y1, d = to - from + 1;
   for ( x1 = from; x1 < rightEdge-d; ++x1 ) {
     for ( y1 = 0; y1 < NY; ++y1 ) {
@@ -106,7 +135,6 @@ function shrink(from, to)
   for ( ; x1 < rightEdge; ++x1 ) {
     elemAt(x1, null, "");
   }
-  rightEdge -= d;
 }
 
 $(function() {
@@ -121,7 +149,7 @@ $(function() {
       var td = $("<td />");
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
-        .text(binMatrix[x][y]);
+        .text(binAt(x,y));
       elemMatrix[x] = elemMatrix[x].add(td);
     }
   }
@@ -172,7 +200,7 @@ $(function() {
        $(".sel").removeClass("sel");
      })
     .click(function() {
-       var sel = $(".sel"), x, y, y1, up, val, count;
+       var sel = $(".sel"), x, y, y1, val, count;
        if ( sel.length < 2 )
          return;
        x = parseInt(sel.first().attr("x"));
@@ -187,38 +215,42 @@ $(function() {
            for ( y1 = y+1; y1 >= 0; y1-=2 ) {
              val = binAt(x,y1-3);
              binAt(x,y1-1,val);
-             elemAt(x,y1-1,val != -1 ? val : "");
+             elemAt(x,y1-1,val);
              val = binAt(x,y1-2);
              binAt(x,y1,val);
-             elemAt(x,y1,val != -1 ? val : "");
+             elemAt(x,y1,val);
              if ( val == null  )
                break;
            }
          } else {
            for ( y1 = y; y1 >=0; --y1 ) {
-             up = elemAt(x+1, y1-1);
-             val = up ? up.text() : "";
+             val = binAt(x+1,y1-1);
+             binAt(x,y1,val);
              elemAt(x,y1,val);
-             up = elemAt(x, y1-1);
-             val = up ? up.text() : "";
+             val = binAt(x, y1-1);
+             binAt(x+1,y1,val);
              elemAt(x+1,y1,val);
            }
          }
 
-         if ( elemAt(x).text() != "" ) {
+         if ( !emptyCol(x) ) {
            ++x;
-           if ( elemAt(x) == null || elemAt(x).text() != "" )
+           if ( x >= rightEdge || !emptyCol(x) )
              return;
          }
 
          var left, right;
-         for ( left = x; left > 0 && elemAt(left-1).text() == ""; --left )
+         for ( left = x; left > 0 && emptyCol(left-1); --left )
            ; // empty
-         for ( right = x; right < rightEdge-1 && elemAt(right+1).text() == ""; ++right )
+         for ( right = x; right < rightEdge-1 && emptyCol(right+1); ++right )
            ; // empty
          if ( (right - left) % 2 == 0 )
            --right;
-         shrink(left, right);
+         if ( right >= left ) {
+           shrinkBin(left, right);
+           shrinkElem(left, right);
+           rightEdge -= (right - left + 1);
+         }
        });
      });
 });
