@@ -27,11 +27,11 @@ function binAt(x,y,val)
 
 function emptyCol(x)
 {
-  if ( x >= rightEdge )
+  if ( x >= rightEdge || binMatrix[x] == EMPTY_COL )
     return true;
-  for ( var y = 0; y < NY; ++y )
-    if ( binMatrix[x][y] != -1 )
-      return false;
+  if ( binMatrix[x][NY-1] != -1 )
+    return false;
+  binMatrix[x] = EMPTY_COL;
   return true;
 }
 
