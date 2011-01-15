@@ -1,13 +1,17 @@
 table
 {
-  border-collapse:collapse;
+  background:#88aa88;
+  border-width:4px;
+  border-style:outset;
 }
 
 td
 {
-  width: 12pt;
-  height:12pt;
+  width: 20pt;
+  height:20pt;
   text-align:center;
+  border-width:2px;
+  border-style:outset;
 }
 
 td.sel
