@@ -147,7 +147,7 @@ function checkComplete()
   if ( binAt(0,y) != 0 )
     return false;
 
-  alert("おめでとう");
+  $("div#congraturations").fadeIn("slow");
   return true;
 }
 

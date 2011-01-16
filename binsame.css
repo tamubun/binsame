@@ -1,4 +1,4 @@
-h1
+.center
 {
 text-align: center;
 }
@@ -7,6 +7,19 @@ div#board
 {
 text-align: center;
 width:100%;
+}
+
+div#congraturations
+{
+  position:absolute;
+  left:20%;
+  top:20%;
+  width: 60%;
+  height: 200pt;
+  font-size: 30pt;
+  background:#aa5544;
+  border: 6px double #aacc22;
+  display: none;
 }
 
 table
