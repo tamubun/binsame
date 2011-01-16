@@ -3,6 +3,7 @@ var NX, // NX must bi odd number.
     EMPTY_COL = [],
     rightEdge,
     binMatrix,
+    binMatrixSave,
     elemMatrix;
 
 for ( var y = 0; y < NY; ++y )
@@ -151,36 +152,46 @@ function checkComplete()
   return true;
 }
 
-function newGame()
+function newGame(redo)
 {
   var x,y;
 
-  switch ( $("select#size").val() ) {
-  case "mini":
-    NX = 5;
-    NY = 3;
-    break;
-  case "small":
-    NX = NY = 7;
-    break;
-  case "middle":
-    NX = 15;
-    NY = 8;
-    break;
-  case "large":
-    NX = 29;
-    NY = 15;
-    break;
-  case "huge":
-    NX = 35;
-    NY = 23;
-    break;
+  if ( redo ) {
+    binMatrix = [];
+    for ( x = 0; x < NX; ++x )
+      binMatrix.push($.makeArray(binMatrixSave[x]));
+  } else {
+    switch ( $("select#size").val() ) {
+    case "mini":
+      NX = 5;
+      NY = 3;
+      break;
+    case "small":
+      NX = NY = 7;
+      break;
+    case "middle":
+      NX = 15;
+      NY = 8;
+      break;
+    case "large":
+      NX = 29;
+      NY = 15;
+      break;
+    case "huge":
+      NX = 35;
+      NY = 23;
+      break;
+    }
+
+    binMatrix = getSeq();
   }
 
   rightEdge = NX;
   elemMatrix = [];
   $("table#area").children().remove();
-  binMatrix = getSeq();
+  binMatrixSave = [];
+  for ( x = 0; x < NX; ++x )
+    binMatrixSave.push($.makeArray(binMatrix[x]));
 
   for ( x = 0; x < NX; ++x )
     elemMatrix.push(jQuery());
@@ -299,7 +310,8 @@ function newGame()
 }
 
 $(function() {
-  $("button#new").click(function() { newGame(); return false; });
+  $("button#new").click(function() { newGame(false); return false; });
+  $("button#redo").click(function() { newGame(true); return false; });
   $("button#close").click(function() { $("#congraturations").hide(); });
 
   newGame($("select#new").val());
