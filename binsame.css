@@ -1,6 +1,12 @@
-body
+h1
 {
 text-align: center;
+}
+
+div#board
+{
+text-align: center;
+width:100%;
 }
 
 table
