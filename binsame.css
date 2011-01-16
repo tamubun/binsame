@@ -3,6 +3,12 @@
 text-align: center;
 }
 
+.caption
+{
+  color:gray;
+  font-size:small;
+}
+
 div#board
 {
 text-align: center;
@@ -20,6 +26,12 @@ div#congraturations
   background:#aa5544;
   border: 6px double #aacc22;
   display: none;
+}
+
+div#rule
+{
+  margin-top:40px;
+  margin-left:5%;
 }
 
 table
