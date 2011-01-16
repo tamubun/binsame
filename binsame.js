@@ -43,7 +43,6 @@ function elemAt(x,y,val)
   if ( val == null ) {
     return td;
   } else {
-    td.text(val != -1 ? val : "");
     if ( val != -1 )
       td.attr("bin", val );
     else
@@ -133,7 +132,7 @@ function shrinkElem(from, to)
     }
   }
   for ( ; x1 < rightEdge; ++x1 ) {
-    elemAt(x1, null, "");
+    elemAt(x1, null, -1);
   }
 }
 
@@ -149,7 +148,6 @@ $(function() {
       var td = $("<td />");
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
-        .text(binAt(x,y))
         .attr("bin", binAt(x,y))
       elemMatrix[x] = elemMatrix[x].add(td);
     }
@@ -167,7 +165,7 @@ $(function() {
        for ( var d = 0; d < 4; ++d ) {
          dir = ["left","up","right","down"][d];
          nei = neighbor(x,y,dir);
-         if ( nei && nei.text() == $(this).text() && nei.text() != "" ) {
+         if ( nei && nei.attr("bin") && nei.attr("bin") == $(this).attr("bin") ) {
              $(this).addClass("sel");
              nei.addClass("sel");
              break;
@@ -191,7 +189,7 @@ $(function() {
        x = parseInt($(this).attr("x"));
        y = parseInt($(this).attr("y"));
        nei = neighbor(x,y, dir);
-       if ( nei && nei.text() == $(this).text() && nei.text() != "") {
+       if ( nei && nei.attr("bin") && nei.attr("bin") == $(this).attr("bin") ) {
          $(".sel").removeClass("sel");
          $(this).addClass("sel");
          nei.addClass("sel");
