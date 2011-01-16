@@ -120,13 +120,8 @@ function getSeq()
 
 function shrinkBin(from, to)
 {
-  var x1, y1, d = to - from + 1;
-  for ( x1 = from; x1 < rightEdge-d; ++x1 ) {
-    binAt(x1, null, binAt(x1+d));
-  }
-  for ( ; x1 < rightEdge; ++x1 ) {
-    binAt(x1, null, EMPTY_COL);
-  }
+  var d = to - from + 1;
+  binMatrix.splice(from,d);
 }
 
 function shrinkElem(from, to)
@@ -134,7 +129,7 @@ function shrinkElem(from, to)
   var x1, y1, d = to - from + 1;
   for ( x1 = from; x1 < rightEdge-d; ++x1 ) {
     for ( y1 = 0; y1 < NY; ++y1 ) {
-      elemAt(x1,y1, elemAt(x1+d,y1).text());
+      elemAt(x1,y1,binAt(x1,y1));
     }
   }
   for ( ; x1 < rightEdge; ++x1 ) {
