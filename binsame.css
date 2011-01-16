@@ -28,13 +28,35 @@ div#congraturations
   display: none;
 }
 
-div#rule
+div#congraturations div
+{
+  margin-top:50px;
+}
+
+button#close
+{
+  float:right;
+  margin-right: 20px;
+}
+
+div#shita
 {
   margin-top:40px;
   margin-left:5%;
 }
 
-table
+div#form{
+  width:20%;
+  float:left;
+}
+
+div#rule
+{
+  width:73%;
+  float:right;
+}
+
+table#area
 {
   margin: 0 auto;
   background:#88aa88;
@@ -42,7 +64,7 @@ table
   border-style:outset;
 }
 
-td
+table#area td
 {
   width: 20pt;
   height:20pt;

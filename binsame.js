@@ -1,9 +1,9 @@
-var NX = 35,
-    NY = 7,
+var NX, // NX must bi odd number.
+    NY,
     EMPTY_COL = [],
-    rightEdge = NX,
+    rightEdge,
     binMatrix,
-    elemMatrix = [];
+    elemMatrix;
 
 for ( var y = 0; y < NY; ++y )
   EMPTY_COL.push(-1);
@@ -151,10 +151,37 @@ function checkComplete()
   return true;
 }
 
-$(function() {
+function newGame()
+{
   var x,y;
 
+  switch ( $("select#size").val() ) {
+  case "mini":
+    NX = 5;
+    NY = 3;
+    break;
+  case "small":
+    NX = NY = 7;
+    break;
+  case "middle":
+    NX = 15;
+    NY = 8;
+    break;
+  case "large":
+    NX = 29;
+    NY = 15;
+    break;
+  case "huge":
+    NX = 35;
+    NY = 23;
+    break;
+  }
+
+  rightEdge = NX;
+  elemMatrix = [];
+  $("table#area").children().remove();
   binMatrix = getSeq();
+
   for ( x = 0; x < NX; ++x )
     elemMatrix.push(jQuery());
   for ( y = 0; y < NY; ++y ) {
@@ -169,8 +196,7 @@ $(function() {
   }
 
   var posX, posY;
-
-  $("td")
+  $("table#area td")
     .mouseenter(function(ev) {
        var dir, nei, x, y;
        posX = ev.pageX;
@@ -270,4 +296,11 @@ $(function() {
          checkComplete();
        });
      });
+}
+
+$(function() {
+  $("button#new").click(function() { newGame(); return false; });
+  $("button#close").click(function() { $("#congraturations").hide(); });
+
+  newGame($("select#new").val());
 });
