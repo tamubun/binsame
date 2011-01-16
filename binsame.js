@@ -136,6 +136,21 @@ function shrinkElem(from, to)
   }
 }
 
+function checkComplete()
+{
+  if ( rightEdge > 1 )
+    return false;
+  for ( var y = 0; y < NY-1; ++y ) {
+    if ( binAt(0,y) != -1 )
+      return false;
+  }
+  if ( binAt(0,y) != 0 )
+    return false;
+
+  alert("おめでとう");
+  return true;
+}
+
 $(function() {
   var x,y;
 
@@ -231,6 +246,8 @@ $(function() {
              elemAt(x+1,y1,val);
            }
          }
+         if ( checkComplete() )
+           return;
 
          if ( !emptyCol(x) ) {
            ++x;
@@ -250,6 +267,7 @@ $(function() {
            shrinkElem(left, right);
            rightEdge -= (right - left + 1);
          }
+         checkComplete();
        });
      });
 });
