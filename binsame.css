@@ -80,14 +80,14 @@ td.sel
 
 td[bin="0"]
 {
-  background-image:url(w.png);
+  background-image:url(./w.png);
   background-repeat:no-repeat;
-  background-position:4px 2px;
+  background-position:center;
 }
 
 td[bin="1"]
 {
-  background-image:url(b.png);
+  background-image:url(./b.png);
   background-repeat:no-repeat;
-  background-position:4px 2px;
+  background-position:center;
 }
