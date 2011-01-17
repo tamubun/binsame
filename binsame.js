@@ -1,4 +1,4 @@
-var NX, // NX must bi odd number.
+var NX, // NX,NY must be odd number.
     NY,
     EMPTY_COL = [],
     rightEdge,
@@ -177,7 +177,7 @@ function newGame(redo)
       break;
     case "middle":
       NX = 15;
-      NY = 8;
+      NY = 9;
       break;
     case "large":
       NX = 29;
