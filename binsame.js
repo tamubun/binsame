@@ -260,7 +260,7 @@ function newGame(redo)
        $(".sel").removeClass("sel");
      })
     .click(function() {
-       var sel = $(".sel"), x, y, y1, val, count;
+       var sel = $(".sel"), x, y, y1, val, count, enter = this;
        if ( sel.length < 2 )
          return;
        x = parseInt(sel.first().attr("x"));
@@ -297,8 +297,11 @@ function newGame(redo)
 
          if ( !emptyCol(x) ) {
            ++x;
-           if ( x >= rightEdge || !emptyCol(x) )
+           if ( x >= rightEdge || !emptyCol(x) ) {
+             console.log(this);
+             $(enter).mouseenter();
              return;
+           }
          }
 
          var left, right;
@@ -313,7 +316,10 @@ function newGame(redo)
            shrinkElem(left, right);
            rightEdge -= (right - left + 1);
          }
-         checkComplete();
+         if ( !checkComplete() ) {
+           console.log(this);
+           $(enter).mouseenter();
+         }
        });
      });
 }
