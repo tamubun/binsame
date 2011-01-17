@@ -1,6 +1,12 @@
 .center
 {
-text-align: center;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.left
+{
+  text-align: left;
 }
 
 .caption
@@ -36,7 +42,7 @@ div#congraturations #head
 div#congraturations #info
 {
   margin-top:10px;
-  margin-left:15px;
+  width:80%;
 }
 
 button#close
@@ -64,7 +70,6 @@ div#rule
 
 table#area
 {
-  margin: 0 auto;
   background:#88aa88;
   border-width:4px;
   border-style:outset;
@@ -74,7 +79,6 @@ table#area td
 {
   width: 20pt;
   height:20pt;
-  text-align:center;
   border-width:2px;
   border-style:outset;
 }
