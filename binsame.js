@@ -148,6 +148,12 @@ function checkComplete()
   if ( binAt(0,y) != 0 )
     return false;
 
+  var x,y,bin="";
+  for ( y = 0; y < NY; ++y ) {
+    for ( x = 0; x < NX; ++x )
+      bin+=binMatrixSave[x][y];
+  }
+  $("blockquote#bin").text(bigInt2str(str2bigInt(bin,2),10));
   $("div#congraturations").fadeIn("slow");
   return true;
 }

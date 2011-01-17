@@ -22,15 +22,21 @@ div#congraturations
   top:20%;
   width: 60%;
   height: 200pt;
-  font-size: 30pt;
   background:#aa5544;
   border: 6px double #aacc22;
   display: none;
 }
 
-div#congraturations div
+div#congraturations #head
 {
   margin-top:50px;
+  font-size: 30pt;
+}
+
+div#congraturations #info
+{
+  margin-top:10px;
+  margin-left:15px;
 }
 
 button#close
