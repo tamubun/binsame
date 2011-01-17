@@ -91,3 +91,15 @@ td[bin="1"]
   background-repeat:no-repeat;
   background-position:center;
 }
+
+* html td[bin="0"]
+{
+  background:none;
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./b.png");
+}
+
+* html td[bin="1"]
+{
+  background:none;
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./w.png");
+}
