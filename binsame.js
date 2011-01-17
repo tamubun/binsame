@@ -9,6 +9,13 @@ var NX, // NX,NY must be odd number.
 for ( var y = 0; y < NY; ++y )
   EMPTY_COL.push(-1);
 
+function copyMatrix(matrix)
+{
+  var copy = [];
+  $.each(matrix, function() { copy.push($.makeArray(this)); });
+  return copy;
+}
+
 function binAt(x,y,val)
 {
   if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
@@ -163,9 +170,7 @@ function newGame(redo)
   var x,y;
 
   if ( redo ) {
-    binMatrix = [];
-    for ( x = 0; x < NX; ++x )
-      binMatrix.push($.makeArray(binMatrixSave[x]));
+    binMatrix = copyMatrix(binMatrixSave);
   } else {
     switch ( $("select#size").val() ) {
     case "mini":
@@ -195,9 +200,7 @@ function newGame(redo)
   rightEdge = NX;
   elemMatrix = [];
   $("table#area").children().remove();
-  binMatrixSave = [];
-  for ( x = 0; x < NX; ++x )
-    binMatrixSave.push($.makeArray(binMatrix[x]));
+  binMatrixSave = copyMatrix(binMatrix);
 
   for ( x = 0; x < NX; ++x )
     elemMatrix.push(jQuery());
