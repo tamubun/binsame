@@ -7,9 +7,6 @@ var NX, // NX,NY must be odd number.
     undoData = null,
     elemMatrix;
 
-for ( var y = 0; y < NY; ++y )
-  EMPTY_COL.push(-1);
-
 function copyMatrix(matrix)
 {
   var copy = [];
@@ -202,6 +199,9 @@ function newGame(redo)
       NY = 23;
       break;
     }
+
+    for ( var y = 0; y < NY; ++y )
+      EMPTY_COL.push(-1);
 
     binMatrix = getSeq();
     undoData = null;
