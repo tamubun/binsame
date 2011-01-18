@@ -161,12 +161,15 @@ function checkComplete()
   if ( binAt(0,y) != 0 )
     return false;
 
-  var x,y,bin="";
+  var x,y,bin="",str;
   for ( y = 0; y < NY; ++y ) {
     for ( x = 0; x < NX; ++x )
       bin+=binMatrixSave[x][y];
   }
-  $("blockquote#bin").text(bigInt2str(str2bigInt(bin,2),10));
+  str = bigInt2str(str2bigInt(bin,2),10);
+  for ( x = str.length - str.length % 80; x > 0; x-=80 )
+    str = str.slice(0, x) + "\n" + str.slice(x);
+  $("blockquote#bin").text(str);
   $("div#congraturations").fadeIn("slow");
   return true;
 }
