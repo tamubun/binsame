@@ -54,19 +54,16 @@ button#close
 
 div#shita
 {
-  margin-top:40px;
-  margin-left:5%;
+  margin-top:20px;
 }
 
-div#form{
-  width:20%;
-  float:left;
+button#new{
+  margin-left: 20em;
 }
 
 div#rule
 {
-  width:73%;
-  float:right;
+  margin-left:20px;
 }
 
 table#area
