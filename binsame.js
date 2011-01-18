@@ -64,16 +64,16 @@ function elemAt(x,y,val)
 function neighbor(x, y, dir)
 {
   switch ( dir ) {
-  case "left":
+  case 0:
     return elemAt(x-1,y);
     break;
-  case "right":
-    return elemAt(x+1,y);
-    break;
-  case "up":
+  case 1:
     return elemAt(x,y-1);
     break;
-  case "down":
+  case 2:
+    return elemAt(x+1,y);
+    break;
+  case 3:
     return elemAt(x,y+1);
     break;
   }
@@ -219,7 +219,7 @@ function newGame(redo)
     }
   }
 
-  var posX, posY;
+  var posX, posY, lastDir = 0;
   $("table#area td")
     .mouseenter(function(ev) {
        var dir, nei, x, y;
@@ -227,8 +227,8 @@ function newGame(redo)
        posY = ev.pageY;
        x = parseInt($(this).attr("x"));
        y = parseInt($(this).attr("y"));
-       for ( var d = 0; d < 4; ++d ) {
-         dir = ["left","up","right","down"][d];
+       for ( var d = lastDir; d < lastDir+4; ++d ) {
+         dir = d%4;
          nei = neighbor(x,y,dir);
          if ( nei && nei.attr("bin") && nei.attr("bin") == $(this).attr("bin") ) {
              $(this).addClass("sel");
@@ -236,6 +236,7 @@ function newGame(redo)
              break;
          }
        }
+       lastDir = dir;
      })
     .mousemove(function(ev) {
        var nei, dir, x, y,
@@ -244,9 +245,9 @@ function newGame(redo)
        if ( Math.abs(dx) < 3 && Math.abs(dy) < 3 )
          return;
        if ( Math.abs(dx) > Math.abs(dy) ) {
-         dir = (dx>0) ? "right" : "left";
+         dir = (dx>0) ? 2 : 0;
        } else {
-         dir = (dy>0) ? "down" : "up";
+         dir = (dy>0) ? 3 : 1;
        }
        posX=ev.pageX;
        posY=ev.pageY;
@@ -258,6 +259,7 @@ function newGame(redo)
          $(".sel").removeClass("sel");
          $(this).addClass("sel");
          nei.addClass("sel");
+         lastDir = dir;
        }
      })
     .mouseleave(function() {
