@@ -55,12 +55,9 @@ function elemAt(x,y,val)
     return td;
   } else {
     td.removeClass("bin0 bin1");
-    if ( val != -1 ) {
-      td.attr("bin", val );
+    td.attr("bin", val );
+    if ( val != -1 )
       td.addClass("bin"+val);
-    } else {
-      td.removeAttr("bin");
-    }
   }
 }
 
@@ -170,7 +167,9 @@ function checkComplete()
   for ( x = str.length - str.length % 80; x > 0; x-=80 )
     str = str.slice(0, x) + "\n" + str.slice(x);
   $("blockquote#bin").text(str);
-  $("div#congraturations").fadeIn("slow");
+  $("div#congraturations").fadeIn("slow", function(){
+    $("#shita").css("visibility", "invisible");
+  });
   return true;
 }
 
@@ -265,7 +264,7 @@ function newGame(redo)
        x = parseInt($(this).attr("x"));
        y = parseInt($(this).attr("y"));
        nei = neighbor(x,y, dir);
-       if ( nei && nei.attr("bin") && nei.attr("bin") == $(this).attr("bin") ) {
+       if ( nei && nei.attr("bin") != -1 && nei.attr("bin") == $(this).attr("bin") ) {
          $(".sel").removeClass("sel");
          $(this).addClass("sel");
          nei.addClass("sel");
@@ -289,7 +288,7 @@ function newGame(redo)
          if ( count++ < 1 )
            return;
          sel.removeClass("sel");
-         if ( y != sel.last().attr("y") ) {
+         if ( y != parseInt(sel.last().attr("y")) ) {
            for ( y1 = y+1; y1 >= 0; y1-=2 ) {
              val = binAt(x,y1-3);
              binAt(x,y1-1,val);
@@ -357,7 +356,10 @@ $(function() {
   $("button#new").click(function() { newGame(false); return false; });
   $("button#undo").click(function() { undo(); return false; });
   $("button#redo").click(function() { newGame(true); return false; });
-  $("button#close").click(function() { $("#congraturations").hide(); });
+  $("button#close").click(function() {
+    $("#shita").css("visibility", "visible");
+    $("#congraturations").hide();
+  });
 
   newGame($("select#new").val());
 });
