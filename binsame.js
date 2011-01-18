@@ -298,7 +298,6 @@ function newGame(redo)
          if ( !emptyCol(x) ) {
            ++x;
            if ( x >= rightEdge || !emptyCol(x) ) {
-             console.log(this);
              $(enter).mouseenter();
              return;
            }
@@ -317,7 +316,6 @@ function newGame(redo)
            rightEdge -= (right - left + 1);
          }
          if ( !checkComplete() ) {
-           console.log(this);
            $(enter).mouseenter();
          }
        });
