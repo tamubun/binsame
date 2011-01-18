@@ -4,6 +4,7 @@ var NX, // NX,NY must be odd number.
     rightEdge,
     binMatrix,
     binMatrixSave,
+    undoData = null,
     elemMatrix;
 
 for ( var y = 0; y < NY; ++y )
@@ -12,7 +13,12 @@ for ( var y = 0; y < NY; ++y )
 function copyMatrix(matrix)
 {
   var copy = [];
-  $.each(matrix, function() { copy.push($.makeArray(this)); });
+  $.each(matrix, function() {
+    if ( this == EMPTY_COL )
+      copy.push(EMPTY_COL);
+    else
+      copy.push($.makeArray(this));
+  });
   return copy;
 }
 
@@ -198,6 +204,7 @@ function newGame(redo)
     }
 
     binMatrix = getSeq();
+    undoData = null;
   }
 
   rightEdge = NX;
@@ -269,6 +276,8 @@ function newGame(redo)
        var sel = $(".sel"), x, y, y1, val, count, enter = this;
        if ( sel.length < 2 )
          return;
+       undoData = [copyMatrix(binMatrix), rightEdge];
+       $("#undo").removeAttr("disabled");
        x = parseInt(sel.first().attr("x"));
        y = parseInt(sel.first().attr("y"));
        count = 0;
@@ -328,8 +337,22 @@ function newGame(redo)
      });
 }
 
+function undo()
+{
+  var x,y,bin;
+  binMatrix = undoData[0];
+  rightEdge = undoData[1];
+  undoData = null;
+  $("#undo").attr("disabled","true");
+  for ( y = 0; y < NY; ++y ){
+    for ( x = 0; x < NX; ++x )
+      elemAt(x,y,binAt(x,y));
+  }
+}
+
 $(function() {
   $("button#new").click(function() { newGame(false); return false; });
+  $("button#undo").click(function() { undo(); return false; });
   $("button#redo").click(function() { newGame(true); return false; });
   $("button#close").click(function() { $("#congraturations").hide(); });
 
