@@ -168,7 +168,7 @@ function checkComplete()
     str = str.slice(0, x) + "\n" + str.slice(x);
   $("blockquote#bin").text(str);
   $("div#congraturations").fadeIn("slow", function(){
-    $("#shita").css("visibility", "invisible");
+    $("#shita").css("visibility", "hidden");
   });
   return true;
 }
