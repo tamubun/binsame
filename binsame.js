@@ -228,7 +228,7 @@ function newGame(redo)
     }
   }
 
-  var posX, posY, lastDir = 0;
+  var posX, posY, lastDir = 0, mouseMoved = false;
   $("table#area td")
     .mouseenter(function(ev) {
        var dir, nei, x, y;
@@ -260,6 +260,7 @@ function newGame(redo)
        }
        posX=ev.pageX;
        posY=ev.pageY;
+       mouseMoved = true;
 
        x = parseInt($(this).attr("x"));
        y = parseInt($(this).attr("y"));
@@ -283,6 +284,7 @@ function newGame(redo)
        x = parseInt(sel.first().attr("x"));
        y = parseInt(sel.first().attr("y"));
        count = 0;
+       mouseMoved = false;
        sel.fadeOut("fast", function() {
          $(this).show();
          if ( count++ < 1 )
@@ -296,7 +298,7 @@ function newGame(redo)
              val = binAt(x,y1-2);
              binAt(x,y1,val);
              elemAt(x,y1,val);
-             if ( val == null  )
+             if ( val == -1  )
                break;
            }
          } else {
@@ -315,7 +317,8 @@ function newGame(redo)
          if ( !emptyCol(x) ) {
            ++x;
            if ( x >= rightEdge || !emptyCol(x) ) {
-             $(enter).mouseenter();
+             if ( !mouseMoved )
+               $(enter).mouseenter();
              return;
            }
          }
@@ -332,7 +335,7 @@ function newGame(redo)
            shrinkElem(left, right);
            rightEdge -= (right - left + 1);
          }
-         if ( !checkComplete() ) {
+         if ( !checkComplete() && !mouseMoved ) {
            $(enter).mouseenter();
          }
        });
