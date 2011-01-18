@@ -239,7 +239,7 @@ function newGame(redo)
        for ( var d = lastDir; d < lastDir+4; ++d ) {
          dir = d%4;
          nei = neighbor(x,y,dir);
-         if ( nei && nei.attr("bin") && nei.attr("bin") == $(this).attr("bin") ) {
+         if ( nei && nei.attr("bin") != -1 && nei.attr("bin") == $(this).attr("bin") ) {
              $(this).addClass("sel");
              nei.addClass("sel");
              break;
