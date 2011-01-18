@@ -27,7 +27,6 @@ div#congraturations
   left:20%;
   top:20%;
   width: 60%;
-  height: 200pt;
   background:#aa5544;
   border: 6px double #aacc22;
   display: none;
@@ -49,6 +48,8 @@ button#close
 {
   float:right;
   margin-right: 20px;
+  margin-bottom: 20px;
+
 }
 
 div#shita
@@ -78,38 +79,46 @@ table#area
 
 table#area td
 {
-  width: 21pt;
-  height:21pt;
+  width: 29px;
+  height:29px;
   border-width:2px;
   border-style:outset;
+  padding:0px;
+  text-align:center;
+  vertical-align:middle;
 }
 
-td.sel
+table#area td.sel
 {
   background-color:red;
 }
 
-td.bin0
+table#area td div
+{
+  width:19px;
+  height:19px;
+  margin:auto;
+}
+
+table#area td.bin0 div
 {
   background-image:url(./w.png);
   background-repeat:no-repeat;
-  background-position:center;
 }
 
-td.bin1
+table#area td.bin1 div
 {
   background-image:url(./b.png);
   background-repeat:no-repeat;
-  background-position:center;
 }
 
-* html td.bin0
+* html table#area td.bin0 div
 {
   background:none;
   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./b.png");
 }
 
-* html td.bin1
+* html table#area td.bin1 div
 {
   background:none;
   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./w.png");

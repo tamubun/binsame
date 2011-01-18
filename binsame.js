@@ -210,7 +210,7 @@ function newGame(redo)
   for ( y = 0; y < NY; ++y ) {
     var tr = $("<tr />").appendTo($("#area"));
     for ( x = 0; x < NX; ++x ) {
-      var td = $("<td />");
+      var td = $("<td><div></div></td>");
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
         .attr("bin", binAt(x,y))
