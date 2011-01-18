@@ -88,27 +88,27 @@ td.sel
   background-color:red;
 }
 
-td[bin="0"]
+td.bin0
 {
   background-image:url(./w.png);
   background-repeat:no-repeat;
   background-position:center;
 }
 
-td[bin="1"]
+td.bin1
 {
   background-image:url(./b.png);
   background-repeat:no-repeat;
   background-position:center;
 }
 
-* html td[bin="0"]
+* html td.bin0
 {
   background:none;
   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./b.png");
 }
 
-* html td[bin="1"]
+* html td.bin1
 {
   background:none;
   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./w.png");

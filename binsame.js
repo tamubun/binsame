@@ -51,10 +51,13 @@ function elemAt(x,y,val)
   if ( val == null ) {
     return td;
   } else {
-    if ( val != -1 )
+    td.removeClass("bin0 bin1");
+    if ( val != -1 ) {
       td.attr("bin", val );
-    else
+      td.addClass("bin"+val);
+    } else {
       td.removeAttr("bin");
+    }
   }
 }
 
@@ -211,6 +214,7 @@ function newGame(redo)
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
         .attr("bin", binAt(x,y))
+        .addClass("bin"+binAt(x,y));
       elemMatrix[x] = elemMatrix[x].add(td);
     }
   }
