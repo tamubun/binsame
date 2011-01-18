@@ -70,6 +70,7 @@ div#rule
 
 table#area
 {
+  margin-top:20px;
   background:#88aa88;
   border-width:4px;
   border-style:outset;
@@ -77,8 +78,8 @@ table#area
 
 table#area td
 {
-  width: 20pt;
-  height:20pt;
+  width: 21pt;
+  height:21pt;
   border-width:2px;
   border-style:outset;
 }
