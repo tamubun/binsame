@@ -274,7 +274,7 @@ function newGame(redo)
      })
     .click(function() {
        var sel = $(".sel"), x, y, y1, val, count, enter = this;
-       if ( sel.length < 2 )
+       if ( sel.length != 2 )
          return;
        undoData = [copyMatrix(binMatrix), rightEdge];
        $("#undo").removeAttr("disabled");
