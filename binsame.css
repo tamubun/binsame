@@ -112,11 +112,11 @@ table#area td.bin1 div
 * html table#area td.bin0 div
 {
   background:none;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./b.png");
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./w.png");
 }
 
 * html table#area td.bin1 div
 {
   background:none;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./w.png");
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./b.png");
 }
