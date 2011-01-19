@@ -285,8 +285,8 @@ function newGame(redo)
        y = parseInt(sel.first().attr("y"));
        count = 0;
        mouseMoved = false;
-       sel.fadeOut("fast", function() {
-         $(this).show();
+       sel.animate({opacity: 0}, "fast", function() {
+         $(this).css({opacity: 1});
          if ( count++ < 1 )
            return;
          sel.removeClass("sel");
