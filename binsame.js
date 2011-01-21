@@ -46,6 +46,14 @@ function emptyCol(x)
   return true;
 }
 
+function setElemVal(elem, val)
+{
+  elem.removeClass("bin0 bin1");
+  elem.attr("bin", val );
+  if ( val != -1 )
+    elem.addClass("bin"+val);
+}
+
 function elemAt(x,y,val)
 {
   if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
@@ -54,10 +62,7 @@ function elemAt(x,y,val)
   if ( val == null ) {
     return td;
   } else {
-    td.removeClass("bin0 bin1");
-    td.attr("bin", val );
-    if ( val != -1 )
-      td.addClass("bin"+val);
+    setElemVal(td, val);
   }
 }
 
@@ -158,18 +163,6 @@ function checkComplete()
   if ( binAt(0,y) != 0 )
     return false;
 
-  var x,y,bin="",str;
-  for ( y = 0; y < NY; ++y ) {
-    for ( x = 0; x < NX; ++x )
-      bin+=binMatrixSave[x][y];
-  }
-  str = bigInt2str(str2bigInt(bin,2),10);
-  for ( x = str.length - str.length % 80; x > 0; x-=80 )
-    str = str.slice(0, x) + "\n" + str.slice(x);
-  $("blockquote#bin").text(str);
-  $("div#congraturations").fadeIn("slow", function(){
-    $("#shita").css("visibility", "hidden");
-  });
   return true;
 }
 
@@ -277,7 +270,7 @@ function newGame(redo)
        $(".sel").removeClass("sel");
      })
     .click(function() {
-       var sel = $(".sel"), x, y, y1, count, enter = this;
+       var sel = $(".sel"), x, y, x1, y1, count, complete, refresh = [], enter = this;
        if ( sel.length != 2 )
          return;
        undoData = [copyMatrix(binMatrix), rightEdge];
@@ -290,12 +283,41 @@ function newGame(redo)
            binAt(x,y1-1,binAt(x,y1-3));
            binAt(x,y1,binAt(x,y1-2));
          }
+         refresh = refresh.concat($.makeArray(elemAt(x).slice(0,y+2)));
        } else {
          for ( y1 = y; y1 >=0; --y1 ) {
            binAt(x,y1,binAt(x+1,y1-1));
            binAt(x+1,y1,binAt(x, y1-1));
          }
+         refresh = refresh.concat($.makeArray(elemAt(x)  .slice(0,y+1)))
+                          .concat($.makeArray(elemAt(x+1).slice(0,y+1)));
        }
+
+       x1 = -1;
+       if ( emptyCol(x) ) {
+         x1 = x;
+       } else if ( (x+1 < rightEdge) && emptyCol(x+1) ) {
+         x1 = x+1;
+       } else {
+         x1 = -1;
+       }
+       if ( x1 > 0 ) {
+         var left, right;
+         for ( left = x1; left > 0 && emptyCol(left-1); --left )
+           ; // empty
+         for ( right = x1; right < rightEdge-1 && emptyCol(right+1); ++right )
+           ; // empty
+         if ( (right - left) % 2 == 0 )
+           --right;
+         if ( right >= left ) {
+           shrinkBin(left, right);
+           for ( x1 = left; x1 < rightEdge; x1++ )
+             refresh = refresh.concat($.makeArray(elemAt(x1)));
+           rightEdge -= (right - left + 1);
+         }
+       }
+
+       complete = checkComplete();
 
        count = 0;
        mouseMoved = false;
@@ -304,48 +326,35 @@ function newGame(redo)
          if ( count++ < 1 )
            return;
          sel.removeClass("sel");
-         if ( y != parseInt(sel.last().attr("y")) ) {
-           for ( y1 = y+1; y1 >= 0; y1-=2 ) {
-             elemAt(x,y1-1,binAt(x,y1-1));
-             elemAt(x,y1,binAt(x,y1));
-             if ( binAt(x,y1) == -1  )
-               break;
-           }
-         } else {
-           for ( y1 = y; y1 >=0; --y1 ) {
-             elemAt(x,y1,binAt(x,y1));
-             elemAt(x+1,y1,binAt(x+1,y1));
-           }
-         }
-         if ( checkComplete() )
-           return;
-
-         if ( !emptyCol(x) ) {
-           ++x;
-           if ( x >= rightEdge || !emptyCol(x) ) {
-             if ( !mouseMoved )
-               $(enter).mouseenter();
-             return;
-           }
+         var i, td, len = refresh.length;
+         for ( i = 0; i < len; ++i ) {
+           td = $(refresh[i]);
+           setElemVal(td, binAt(td.attr("x"), td.attr("y")));
          }
 
-         var left, right;
-         for ( left = x; left > 0 && emptyCol(left-1); --left )
-           ; // empty
-         for ( right = x; right < rightEdge-1 && emptyCol(right+1); ++right )
-           ; // empty
-         if ( (right - left) % 2 == 0 )
-           --right;
-         if ( right >= left ) {
-           shrinkBin(left, right);
-           shrinkElem(left, right);
-           rightEdge -= (right - left + 1);
-         }
-         if ( !checkComplete() && !mouseMoved ) {
+         if ( complete ) {
+           approve();
+         } else if (!mouseMoved) {
            $(enter).mouseenter();
          }
        });
      });
+}
+
+function approve()
+{
+  var x,y,bin="",str;
+  for ( y = 0; y < NY; ++y ) {
+    for ( x = 0; x < NX; ++x )
+      bin+=binMatrixSave[x][y];
+  }
+  str = bigInt2str(str2bigInt(bin,2),10);
+  for ( x = str.length - str.length % 80; x > 0; x-=80 )
+    str = str.slice(0, x) + "\n" + str.slice(x);
+  $("blockquote#bin").text(str);
+  $("div#congraturations").fadeIn("slow", function(){
+    $("#shita").css("visibility", "hidden");
+  });
 }
 
 function undo()
