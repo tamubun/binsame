@@ -291,6 +291,7 @@ function newGame(redo)
            return;
          sel.removeClass("sel");
          if ( y != parseInt(sel.last().attr("y")) ) {
+           createVisualCol(x);
            for ( y1 = y+1; y1 >= 0; y1-=2 ) {
              val = binAt(x,y1-3);
              binAt(x,y1-1,val);
@@ -353,6 +354,16 @@ function undo()
     for ( x = 0; x < NX; ++x )
       elemAt(x,y,binAt(x,y));
   }
+}
+
+function createVisualCol(x)
+{
+  var table = $("<table><tr><td>here</td></tr></table>");
+  var pos = elemAt(x,0).offset();
+  table
+    .attr("id", "col"+x)
+    .appendTo("#board")
+    .css({position:"absolute", left:pos.left, top:pos.top});
 }
 
 $(function() {
