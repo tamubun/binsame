@@ -286,12 +286,16 @@ function newGame(redo)
        count = 0;
        mouseMoved = false;
        sel.animate({opacity: 0}, "fast", function() {
-         $(this).css({opacity: 1});
          if ( count++ < 1 )
            return;
          sel.removeClass("sel");
          if ( y != parseInt(sel.last().attr("y")) ) {
-           createVisualCol(x,y);
+           var col = changeToVisualCol(x,y);
+           col.animate({top:"+=62px"},"fast", function(){
+             elemAt(parseInt($(this).attr("x"))).removeClass("emp");
+             $(this).remove();
+             sel.css({opacity: 1});
+           });
            for ( y1 = y+1; y1 >= 0; y1-=2 ) {
              val = binAt(x,y1-3);
              binAt(x,y1-1,val);
@@ -311,6 +315,7 @@ function newGame(redo)
              binAt(x+1,y1,val);
              elemAt(x+1,y1,val);
            }
+           sel.css({opacity: 1});
          }
          if ( checkComplete() )
            return;
@@ -356,7 +361,7 @@ function undo()
   }
 }
 
-function createVisualCol(x, y)
+function changeToVisualCol(x, y)
 {
   if ( y <= 0 )
     return;
@@ -367,15 +372,17 @@ function createVisualCol(x, y)
       borderT = parseInt(td.css("border-top-width").replace("px","")),
       y1;
   table
-    .attr("id", "col"+x)
+    .attr("x", x)
     .appendTo("#board")
     .css({position:"absolute", left:pos.left - borderL, top:pos.top - borderT});
   for ( y1 = 0; y1 < y; ++y1 ) {
-    $("<tr><td><div></div></td></tr>")
+    td = elemAt(x,y1);
+    $("<tr></tr>")
       .appendTo(table)
-      .children().addClass("bin"+binAt(x,y1));
+      .append(td.clone().addClass("anim"));
+    td.addClass("emp");
   }
-  table.animate({top:"+=31px"},"slow");
+  return table;
 }
 
 $(function() {

@@ -85,6 +85,16 @@ div#board td
   vertical-align:middle;
 }
 
+div#board td.anim
+{
+  width: 29px;
+  height:29px;
+  border-width:0px;
+  padding:2px;
+  text-align:center;
+  vertical-align:middle;
+}
+
 div#board td.sel
 {
   background-color:red;
@@ -109,6 +119,11 @@ div#board td.bin1 div
   background-repeat:no-repeat;
 }
 
+div#board td.emp div
+{
+  background-image:none;
+}
+
 * html div#board td.bin0 div
 {
   background:none;
@@ -120,3 +135,9 @@ div#board td.bin1 div
   background:none;
   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./b.png");
 }
+
+* html div#board td.emp div
+{
+  background:none;
+}
+
