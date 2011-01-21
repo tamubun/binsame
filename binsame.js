@@ -206,9 +206,10 @@ function newGame(redo)
       EMPTY_COL.push(-1);
 
     binMatrix = getSeq();
-    undoData = null;
   }
 
+  undoData = null;
+  $("#undo").attr("disabled",true);
   rightEdge = NX;
   elemMatrix = [];
   $("table#area").children().remove();
