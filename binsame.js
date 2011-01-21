@@ -277,13 +277,26 @@ function newGame(redo)
        $(".sel").removeClass("sel");
      })
     .click(function() {
-       var sel = $(".sel"), x, y, y1, val, count, enter = this;
+       var sel = $(".sel"), x, y, y1, count, enter = this;
        if ( sel.length != 2 )
          return;
        undoData = [copyMatrix(binMatrix), rightEdge];
        $("#undo").removeAttr("disabled");
        x = parseInt(sel.first().attr("x"));
        y = parseInt(sel.first().attr("y"));
+
+       if ( y != parseInt(sel.last().attr("y")) ) {
+         for ( y1 = y+1; y1 >= 0; y1-=2 ) {
+           binAt(x,y1-1,binAt(x,y1-3));
+           binAt(x,y1,binAt(x,y1-2));
+         }
+       } else {
+         for ( y1 = y; y1 >=0; --y1 ) {
+           binAt(x,y1,binAt(x+1,y1-1));
+           binAt(x+1,y1,binAt(x, y1-1));
+         }
+       }
+
        count = 0;
        mouseMoved = false;
        sel.animate({opacity: 0}, "fast", function() {
@@ -293,23 +306,15 @@ function newGame(redo)
          sel.removeClass("sel");
          if ( y != parseInt(sel.last().attr("y")) ) {
            for ( y1 = y+1; y1 >= 0; y1-=2 ) {
-             val = binAt(x,y1-3);
-             binAt(x,y1-1,val);
-             elemAt(x,y1-1,val);
-             val = binAt(x,y1-2);
-             binAt(x,y1,val);
-             elemAt(x,y1,val);
-             if ( val == -1  )
+             elemAt(x,y1-1,binAt(x,y1-1));
+             elemAt(x,y1,binAt(x,y1));
+             if ( binAt(x,y1) == -1  )
                break;
            }
          } else {
            for ( y1 = y; y1 >=0; --y1 ) {
-             val = binAt(x+1,y1-1);
-             binAt(x,y1,val);
-             elemAt(x,y1,val);
-             val = binAt(x, y1-1);
-             binAt(x+1,y1,val);
-             elemAt(x+1,y1,val);
+             elemAt(x,y1,binAt(x,y1));
+             elemAt(x+1,y1,binAt(x+1,y1));
            }
          }
          if ( checkComplete() )
