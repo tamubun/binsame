@@ -56,7 +56,7 @@ function setElemVal(elem, val)
 
 function elemAt(x,y,val)
 {
-  if ( x >= rightEdge || x < 0 || y && y >= NY || y && y < 0 )
+  if ( x >= NX || x < 0 || y && y >= NY || y && y < 0 )
     return null;
   var td = (y != null) ? elemMatrix[x].slice(y,y+1) : elemMatrix[x];
   if ( val == null ) {
