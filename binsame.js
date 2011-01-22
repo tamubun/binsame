@@ -370,6 +370,30 @@ function undo()
   }
 }
 
+function changeToVisualCol(x, y)
+{
+  if ( y <= 0 )
+    return;
+  var table = $("<table></table>"),
+      td = elemAt(x,0),
+      pos = td.offset(),
+      borderL = parseInt(td.css("border-left-width").replace("px","")),
+      borderT = parseInt(td.css("border-top-width").replace("px","")),
+      y1;
+  table
+    .attr("x", x)
+    .appendTo("#board")
+    .css({position:"absolute", left:pos.left - borderL, top:pos.top - borderT});
+  for ( y1 = 0; y1 < y; ++y1 ) {
+    td = elemAt(x,y1);
+    $("<tr></tr>")
+      .appendTo(table)
+      .append(td.clone().addClass("anim"));
+    td.addClass("emp");
+  }
+  return table;
+}
+
 $(function() {
   $("button#new").click(function() { newGame(false); return false; });
   $("button#undo").click(function() { undo(); return false; });
