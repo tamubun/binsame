@@ -334,11 +334,15 @@ function newGame(redo)
        var dropPhase = function() {
          if ( y != parseInt(sel.last().attr("y")) ) {
            var col = changeToVisualCol(x,y);
-           col.animate({top:"+=62px"},"fast", function(){
-             elemAt(parseInt($(this).attr("x"))).removeClass("emp");
-             $(this).remove();
+           if ( col != null ) {
+             col.animate({top:"+=62px"},"fast", function(){
+               elemAt(parseInt($(this).attr("x"))).removeClass("emp");
+               $(this).remove();
+               $("#area").dequeue();
+             });
+           } else {
              $("#area").dequeue();
-           });
+           }
          } else {
            $("#area").dequeue();
          }
@@ -404,7 +408,7 @@ function undo()
 function changeToVisualCol(x, y)
 {
   if ( y <= 0 )
-    return;
+    return null;
   var table = $("<table></table>"),
       td = elemAt(x,0),
       pos = td.offset(),
