@@ -301,7 +301,7 @@ function newGame(redo)
        } else {
          x1 = -1;
        }
-       if ( x1 > 0 ) {
+       if ( x1 >= 0 ) {
          var left, right;
          for ( left = x1; left > 0 && emptyCol(left-1); --left )
            ; // empty
