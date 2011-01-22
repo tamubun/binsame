@@ -321,11 +321,35 @@ function newGame(redo)
 
        count = 0;
        mouseMoved = false;
-       sel.animate({opacity: 0}, "fast", function() {
-         $(this).css({opacity: 1});
-         if ( count++ < 1 )
-           return;
-         sel.removeClass("sel");
+
+       var erasePhase = function() {
+         sel.animate({opacity: 0}, "fast", function() {
+           if ( count++ < 1 )
+             return;
+           sel.removeClass("sel");
+           $("#area").dequeue();
+         });
+       };
+
+       var dropPhase = function() {
+         if ( y != parseInt(sel.last().attr("y")) ) {
+           var col = changeToVisualCol(x,y);
+           col.animate({top:"+=62px"},"fast", function(){
+             elemAt(parseInt($(this).attr("x"))).removeClass("emp");
+             $(this).remove();
+             $("#area").dequeue();
+           });
+         } else {
+           $("#area").dequeue();
+         }
+       };
+
+       var shrinkPhase = function() {
+         sel.css({opacity: 1});
+         $("#area").dequeue();
+       };
+
+       var endPhase = function() {
          var i, td, len = refresh.length;
          for ( i = 0; i < len; ++i ) {
            td = $(refresh[i]);
@@ -337,7 +361,14 @@ function newGame(redo)
          } else if (!mouseMoved) {
            $(enter).mouseenter();
          }
-       });
+         $("#area").dequeue();
+       };
+
+       $("#area")
+         .queue(erasePhase)
+         .queue(dropPhase)
+         .queue(shrinkPhase)
+         .queue(endPhase);
      });
 }
 
