@@ -319,16 +319,15 @@ function newGame(redo)
          }
        }
 
+       sel.removeClass("sel");
        complete = checkComplete();
-
        mouseMoved = false;
 
        var erasePhase = function() {
          var count = 2;
 
-         sel.animate({opacity: 0}, "fast", function() {
+         $("div",sel).animate({opacity: 0}, "fast", function() {
            if ( --count <= 0 ) {
-             sel.removeClass("sel");
              $("#area").dequeue();
            }
          });
@@ -342,13 +341,11 @@ function newGame(redo)
 
              col1.animate({left:"+=35px"},"fast", function(){
                if ( --count <= 0 ) {
-                 sel.removeClass("sel");
                  $("#area").dequeue();
                }
              });
              col2.animate({left:"-=35px"},"fast", function(){
                if ( --count <= 0 ) {
-                 sel.removeClass("sel");
                  $("#area").dequeue();
                }
              });
@@ -361,7 +358,6 @@ function newGame(redo)
            if ( y > 0 ) {
              var col = changeToVisualCol(x,y);
              col.animate({top:"+=62px"},"fast", function(){
-               elemAt(parseInt($(this).attr("x"))).removeClass("emp");
                $(this).remove();
                $("#area").dequeue();
              });
@@ -374,13 +370,11 @@ function newGame(redo)
                  col2 = swap[1],
                  count = 2;
              col1.animate({top:"+=31px"},"fast", function(){
-               elemAt(parseInt($(this).attr("x"))).removeClass("emp");
                $(this).remove();
                if ( --count <= 0 )
                  $("#area").dequeue();
              });
              col2.animate({top:"+=31px"},"fast", function(){
-               elemAt(parseInt($(this).attr("x"))).removeClass("emp");
                $(this).remove();
                if ( --count <= 0 )
                  $("#area").dequeue();
@@ -392,7 +386,6 @@ function newGame(redo)
        };
 
        var shrinkPhase = function() {
-         sel.css({opacity: 1});
          $("#area").dequeue();
        };
 
@@ -402,6 +395,8 @@ function newGame(redo)
            td = $(refresh[i]);
            setElemVal(td, binAt(td.attr("x"), td.attr("y")));
          }
+         $(".emp").removeClass("emp");
+         $("div",sel).css({opacity: 1});
 
          if ( complete ) {
            approve();
