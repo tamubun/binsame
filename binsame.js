@@ -270,7 +270,7 @@ function newGame(redo)
        $(".sel").removeClass("sel");
      })
     .click(function() {
-       var sel = $(".sel"), x, y, x1, y1, count, complete, refresh = [], enter = this;
+       var sel = $(".sel"), x, y, x1, y1, swap, complete, refresh = [], enter = this;
        if ( sel.length != 2 )
          return;
        undoData = [copyMatrix(binMatrix), rightEdge];
@@ -278,6 +278,7 @@ function newGame(redo)
        x = parseInt(sel.first().attr("x"));
        y = parseInt(sel.first().attr("y"));
 
+       swap = null;
        if ( y != parseInt(sel.last().attr("y")) ) {
          for ( y1 = y+1; y1 >= 0; y1-=2 ) {
            binAt(x,y1-1,binAt(x,y1-3));
@@ -285,6 +286,7 @@ function newGame(redo)
          }
          refresh = refresh.concat($.makeArray(elemAt(x).slice(0,y+2)));
        } else {
+         swap = [];
          for ( y1 = y; y1 >=0; --y1 ) {
            binAt(x,y1,binAt(x+1,y1-1));
            binAt(x+1,y1,binAt(x, y1-1));
@@ -319,22 +321,45 @@ function newGame(redo)
 
        complete = checkComplete();
 
-       count = 0;
        mouseMoved = false;
 
        var erasePhase = function() {
+         var count = 2;
+
          sel.animate({opacity: 0}, "fast", function() {
-           if ( count++ < 1 )
-             return;
-           sel.removeClass("sel");
-           $("#area").dequeue();
+           if ( --count <= 0 ) {
+             sel.removeClass("sel");
+             $("#area").dequeue();
+           }
          });
+
+         if ( swap != null ) {
+           if ( y > 0 ) {
+             var col1 = changeToVisualCol(x,y),
+                 col2 = changeToVisualCol(x+1,y);
+             count += 2;
+             swap = [col1, col2];
+
+             col1.animate({left:"+=35px"},"fast", function(){
+               if ( --count <= 0 ) {
+                 sel.removeClass("sel");
+                 $("#area").dequeue();
+               }
+             });
+             col2.animate({left:"-=35px"},"fast", function(){
+               if ( --count <= 0 ) {
+                 sel.removeClass("sel");
+                 $("#area").dequeue();
+               }
+             });
+           }
+         }
        };
 
        var dropPhase = function() {
-         if ( y != parseInt(sel.last().attr("y")) ) {
-           var col = changeToVisualCol(x,y);
-           if ( col != null ) {
+         if ( swap == null ) {
+           if ( y > 0 ) {
+             var col = changeToVisualCol(x,y);
              col.animate({top:"+=62px"},"fast", function(){
                elemAt(parseInt($(this).attr("x"))).removeClass("emp");
                $(this).remove();
@@ -344,7 +369,25 @@ function newGame(redo)
              $("#area").dequeue();
            }
          } else {
-           $("#area").dequeue();
+           if ( y > 0 ) {
+             var col1 = swap[0],
+                 col2 = swap[1],
+                 count = 2;
+             col1.animate({top:"+=31px"},"fast", function(){
+               elemAt(parseInt($(this).attr("x"))).removeClass("emp");
+               $(this).remove();
+               if ( --count <= 0 )
+                 $("#area").dequeue();
+             });
+             col2.animate({top:"+=31px"},"fast", function(){
+               elemAt(parseInt($(this).attr("x"))).removeClass("emp");
+               $(this).remove();
+               if ( --count <= 0 )
+                 $("#area").dequeue();
+             });
+           } else {
+             $("#area").dequeue();
+           }
          }
        };
 
@@ -407,8 +450,6 @@ function undo()
 
 function changeToVisualCol(x, y)
 {
-  if ( y <= 0 )
-    return null;
   var table = $("<table></table>"),
       td = elemAt(x,0),
       pos = td.offset(),
