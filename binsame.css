@@ -107,37 +107,32 @@ div#board td div
   margin:auto;
 }
 
-div#board td.bin0 div
+div#board td div.bin0
 {
   background-image:url(./w.png);
   background-repeat:no-repeat;
 }
 
-div#board td.bin1 div
+div#board td div.bin1
 {
   background-image:url(./b.png);
+  background-repeat:no-repeat;
+}
+
+div#board td.sel div.bin0
+{
+  background-image:url(./w-sel.png);
+  background-repeat:no-repeat;
+}
+
+div#board td.sel div.bin1
+{
+  background-image:url(./b-sel.png);
   background-repeat:no-repeat;
 }
 
 div#board td.emp div
 {
   background-image:none;
-}
-
-* html div#board td.bin0 div
-{
-  background:none;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./w.png");
-}
-
-* html div#board td.bin1 div
-{
-  background:none;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src="./b.png");
-}
-
-* html div#board td.emp div
-{
-  background:none;
 }
 

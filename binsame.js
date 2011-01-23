@@ -48,10 +48,11 @@ function emptyCol(x)
 
 function setElemVal(elem, val)
 {
-  elem.removeClass("bin0 bin1");
+  var div = $("div",elem);
+  div.removeClass("bin0 bin1");
   elem.attr("bin", val );
   if ( val != -1 )
-    elem.addClass("bin"+val);
+    div.addClass("bin"+val);
 }
 
 function elemAt(x,y,val)
@@ -219,7 +220,7 @@ function newGame(redo)
       td.appendTo(tr)
         .attr("x", x).attr("y",y)
         .attr("bin", binAt(x,y))
-        .addClass("bin"+binAt(x,y));
+        .children().addClass("bin"+binAt(x,y));
       elemMatrix[x] = elemMatrix[x].add(td);
     }
   }
