@@ -208,8 +208,10 @@ function newGame(redo)
   $("table#area").children().remove();
   binMatrixSave = copyMatrix(binMatrix);
 
-  for ( x = 0; x < NX; ++x )
+  for ( x = 0; x < NX; ++x ) {
     elemMatrix.push(jQuery());
+    $("#area").append("<col />");
+  }
   for ( y = 0; y < NY; ++y ) {
     var tr = $("<tr />").appendTo($("#area"));
     for ( x = 0; x < NX; ++x ) {
@@ -311,7 +313,7 @@ function newGame(redo)
            ; // empty
          if ( (right - left) % 2 == 0 )
            --right;
-         if ( right >= left ) {
+         if ( right > left ) {
            shrinkBin(left, right);
            for ( x1 = left; x1 < rightEdge; x1++ )
              refresh = refresh.concat($.makeArray(elemAt(x1)));
@@ -383,9 +385,22 @@ function newGame(redo)
              $("#area").dequeue();
            }
          }
+
+         if ( right > left ) {
+           var colElems = $("col");
+           for ( x1 = left; x1 <= right; ++x1 ) {
+             $(colElems[x1]).css({background:"#ffbb00"});
+           }
+         }
        };
 
        var shrinkPhase = function() {
+         if ( right > left ) {
+           var colElems = $("col");
+           for ( x1 = left; x1 <= right; ++x1 ) {
+             $(colElems[x1]).css({background:""});
+           }
+         }
          $("#area").dequeue();
        };
 
