@@ -225,7 +225,8 @@ function newGame(redo)
     }
   }
 
-  var posX, posY, lastDir = 0, mouseMoved = false;
+  var posX, posY, lastDir = 0, mouseMoved = false, clickable = true;
+
   $("table#area td")
     .mouseenter(function(ev) {
        var dir, nei, x, y;
@@ -274,9 +275,10 @@ function newGame(redo)
      })
     .click(function() {
        var sel = $(".sel"), x, y, x1, y1, swap, complete, refresh = [], enter = this;
-       if ( sel.length != 2 )
+       if ( sel.length != 2 || !clickable )
          return;
        undoData = [copyMatrix(binMatrix), rightEdge];
+       clickable = false;
        $("#undo").removeAttr("disabled");
        x = parseInt(sel.first().attr("x"));
        y = parseInt(sel.first().attr("y"));
@@ -420,6 +422,7 @@ function newGame(redo)
            $(enter).mouseenter();
          }
          $("#area").dequeue();
+         clickable = true;
        };
 
        $("#area")
