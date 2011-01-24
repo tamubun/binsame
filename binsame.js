@@ -338,8 +338,8 @@ function newGame(redo)
 
          if ( swap != null ) {
            if ( y > 0 ) {
-             var col1 = changeToVisualCol(x,y),
-                 col2 = changeToVisualCol(x+1,y);
+             var col1 = changeToVisualCol(x,y, 0),
+                 col2 = changeToVisualCol(x+1,y, 1);
              count += 2;
              swap = [col1, col2];
 
@@ -360,9 +360,10 @@ function newGame(redo)
        var dropPhase = function() {
          if ( swap == null ) {
            if ( y > 0 ) {
-             var col = changeToVisualCol(x,y);
+             var col = changeToVisualCol(x,y, 0);
              col.animate({top:"+=62px"},"fast", function(){
-               $(this).remove();
+               $(this).hide()
+                      .children().remove();
                $("#area").dequeue();
              });
            } else {
@@ -374,12 +375,14 @@ function newGame(redo)
                  col2 = swap[1],
                  count = 2;
              col1.animate({top:"+=31px"},"fast", function(){
-               $(this).remove();
+               $(this).hide()
+                      .children().remove();
                if ( --count <= 0 )
                  $("#area").dequeue();
              });
              col2.animate({top:"+=31px"},"fast", function(){
-               $(this).remove();
+               $(this).hide()
+                      .children().remove();
                if ( --count <= 0 )
                  $("#area").dequeue();
              });
@@ -454,9 +457,9 @@ function undo()
   }
 }
 
-function changeToVisualCol(x, y)
+function changeToVisualCol(x, y, num)
 {
-  var table = $("<table></table>"),
+  var table = $("table#vis_"+num),
       td = elemAt(x,0),
       pos = td.offset(),
       borderL = parseInt(td.css("border-left-width").replace("px","")),
@@ -464,8 +467,8 @@ function changeToVisualCol(x, y)
       y1;
   table
     .attr("x", x)
-    .appendTo("#board")
-    .css({position:"absolute", left:pos.left - borderL, top:pos.top - borderT});
+    .css({left:pos.left - borderL, top:pos.top - borderT})
+    .show();
   for ( y1 = 0; y1 < y; ++y1 ) {
     td = elemAt(x,y1);
     $("<tr></tr>")

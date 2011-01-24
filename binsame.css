@@ -74,6 +74,12 @@ table#area
   border-style:outset;
 }
 
+table.vis
+{
+  position:absolute;
+  display:none;
+}
+
 div#board td
 {
   width: 29px;
