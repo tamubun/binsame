@@ -100,6 +100,11 @@ div#board td.sel
   background-color:red;
 }
 
+div#board td.erase
+{
+  background-color:#ffbb00;
+}
+
 div#board td div
 {
   width:19px;

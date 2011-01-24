@@ -211,7 +211,6 @@ function newGame(redo)
 
   for ( x = 0; x < NX; ++x ) {
     elemMatrix.push(jQuery());
-    $("#area").append("<col />");
   }
   for ( y = 0; y < NY; ++y ) {
     var tr = $("<tr />").appendTo($("#area"));
@@ -390,20 +389,13 @@ function newGame(redo)
          }
 
          if ( right > left ) {
-           var colElems = $("col");
-           for ( x1 = left; x1 <= right; ++x1 ) {
-             $(colElems[x1]).css({background:"#ffbb00"});
-           }
+           for ( x1 = left; x1 <= right; ++x1 )
+             elemAt(x1).addClass("erase");
          }
        };
 
        var shrinkPhase = function() {
-         if ( right > left ) {
-           var colElems = $("col");
-           for ( x1 = left; x1 <= right; ++x1 ) {
-             $(colElems[x1]).css({background:""});
-           }
-         }
+         $("td.erase").removeClass("erase");
          $("#area").dequeue();
        };
 
