@@ -273,7 +273,8 @@ function newGame(redo)
        $(".sel").removeClass("sel");
      })
     .click(function() {
-       var sel = $(".sel"), x, y, x1, y1, swap, complete, refresh = [], enter = this;
+       var sel = $(".sel"), x, y, x1, y1, swap = false, complete, refresh = [],
+           enter = this;
        if ( sel.length != 2 || !clickable )
          return;
        undoData = [copyMatrix(binMatrix), rightEdge];
@@ -282,7 +283,6 @@ function newGame(redo)
        x = parseInt(sel.first().attr("x"));
        y = parseInt(sel.first().attr("y"));
 
-       swap = null;
        if ( y != parseInt(sel.last().attr("y")) ) {
          for ( y1 = y+1; y1 >= 0; y1-=2 ) {
            binAt(x,y1-1,binAt(x,y1-3));
@@ -290,7 +290,7 @@ function newGame(redo)
          }
          refresh = refresh.concat($.makeArray(elemAt(x).slice(0,y+2)));
        } else {
-         swap = [];
+         swap = true;
          for ( y1 = y; y1 >=0; --y1 ) {
            binAt(x,y1,binAt(x+1,y1-1));
            binAt(x+1,y1,binAt(x, y1-1));
@@ -336,12 +336,11 @@ function newGame(redo)
            }
          });
 
-         if ( swap != null ) {
+         if ( swap  ) {
            if ( y > 0 ) {
              var col1 = changeToVisualCol(x,y, 0),
                  col2 = changeToVisualCol(x+1,y, 1);
              count += 2;
-             swap = [col1, col2];
 
              col1.animate({left:"+=35px"},"fast", function(){
                if ( --count <= 0 ) {
@@ -358,7 +357,7 @@ function newGame(redo)
        };
 
        var dropPhase = function() {
-         if ( swap == null ) {
+         if ( !swap  ) {
            if ( y > 0 ) {
              var col = changeToVisualCol(x,y, 0);
              col.animate({top:"+=62px"},"fast", function(){
@@ -371,8 +370,8 @@ function newGame(redo)
            }
          } else {
            if ( y > 0 ) {
-             var col1 = swap[0],
-                 col2 = swap[1],
+             var col1 = $("#vis_0"),
+                 col2 = $("#vis_1"),
                  count = 2;
              col1.animate({top:"+=31px"},"fast", function(){
                $(this).hide()
