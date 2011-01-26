@@ -487,5 +487,5 @@ $(function() {
     $("#congraturations").hide();
   });
 
-  newGame($("select#new").val());
+  newGame(false);
 });
