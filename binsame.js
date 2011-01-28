@@ -57,8 +57,6 @@ function setElemVal(elem, val)
 
 function elemAt(x,y,val)
 {
-  if ( x >= NX || x < 0 || y && y >= NY || y && y < 0 )
-    return null;
   var td = (y != null) ? elemMatrix[x].slice(y,y+1) : elemMatrix[x];
   if ( val == null ) {
     return td;
@@ -71,16 +69,16 @@ function neighbor(x, y, dir)
 {
   switch ( dir ) {
   case 0:
-    return elemAt(x-1,y);
+    return x<1 ? null : elemAt(x-1,y);
     break;
   case 1:
-    return elemAt(x,y-1);
+    return y<1 ? null : elemAt(x,y-1);
     break;
   case 2:
-    return elemAt(x+1,y);
+    return x>=rightEdge-1 ? null: elemAt(x+1,y);
     break;
   case 3:
-    return elemAt(x,y+1);
+    return y>=NY-1 ? null: elemAt(x,y+1);
     break;
   }
 }
