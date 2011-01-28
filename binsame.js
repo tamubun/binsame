@@ -484,6 +484,7 @@ $(function() {
     $("#shita").css("visibility", "visible");
     $("#congraturations").hide();
   });
+  $("input#anim").change(function(){$.fx.off = !$.fx.off});
 
   newGame(false);
 });
